@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Posts on debidong&#39;s site</title>
+    <link>http://www.debidong.github.io/post/</link>
+    <description>Recent content in Posts on debidong&#39;s site</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en</language>
+    <managingEditor>debidong@foxmail.com (debidong)</managingEditor>
+    <webMaster>debidong@foxmail.com (debidong)</webMaster>
+    <copyright>debidong</copyright>
+    <lastBuildDate>Sat, 21 Oct 2023 15:00:00 +0800</lastBuildDate><atom:link href="http://www.debidong.github.io/post/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Everything about HTTPS</title>
+      <link>http://www.debidong.github.io/post/everything-about-https/</link>
+      <pubDate>Sat, 21 Oct 2023 15:00:00 +0800</pubDate>
+      <author>debidong@foxmail.com (debidong)</author>
+      <guid>http://www.debidong.github.io/post/everything-about-https/</guid>
+      <description>During my experience of this year&amp;rsquo;s fall job application process, many interviewers asked questions about HTTPS like such:
+How is the security of HTTPS implemented compared to HTTP? In the HTTPS protocol, how is data transmitted? What are the steps of HTTPS? (A speechless question) What advantages does ECDH have over HTTPS? These interviews told me that it&amp;rsquo;s necessary to delve deeper into HTTPS. However, before we get into HTTPS, it&amp;rsquo;s important to understand its predecessor, HTTP.</description>
+    </item>
+    
+    <item>
+      <title>SQLi</title>
+      <link>http://www.debidong.github.io/post/sqli/</link>
+      <pubDate>Fri, 20 Oct 2023 15:00:00 +0800</pubDate>
+      <author>debidong@foxmail.com (debidong)</author>
+      <guid>http://www.debidong.github.io/post/sqli/</guid>
+      <description>SQL injection is the placement of malicious code in SQL statements, via web page input. This can allow an attacker to view data that they are not normally able to retrieve.
+SQL injection can occur in:
+GET parameters POST data Cookies Search fields Certain fields in the HTTP request headers And so on, and so forth. As long as the request involves querying a backend database, there is a potential for SQL injection.</description>
+    </item>
+    
+    <item>
+      <title>CVE-2023-2317</title>
+      <link>http://www.debidong.github.io/post/cve-2023-2317/</link>
+      <pubDate>Sat, 07 Oct 2023 15:00:00 +0800</pubDate>
+      <author>debidong@foxmail.com (debidong)</author>
+      <guid>http://www.debidong.github.io/post/cve-2023-2317/</guid>
+      <description>1 CVE-2023-2317 DOM-based XSS in updater/update.html in Typora before 1.6.7 on Windows and Linux allows a crafted markdown file to run arbitrary JavaScript code in the context of Typora main window via loading typora://app/typemark/updater/update.html in tag. This vulnerability can be exploited if a user opens a malicious markdown file in Typora, or copies text from a malicious webpage and paste it into Typora.
+By way of conclusion, it&amp;rsquo;s an XSS attack.</description>
+    </item>
+    
+    <item>
+      <title>Code With Go</title>
+      <link>http://www.debidong.github.io/post/code-with-go/</link>
+      <pubDate>Thu, 24 Aug 2023 22:00:00 +0800</pubDate>
+      <author>debidong@foxmail.com (debidong)</author>
+      <guid>http://www.debidong.github.io/post/code-with-go/</guid>
+      <description>Go language (also known as Golang) is an open-source programming language developed by Google and first publicly released in 2009. It is designed for building efficient, reliable, and concise software. One of the design goals of Go is to provide a language with high concurrency, high performance, and ease of writing, suitable for application development in various domains.
+Go language includes built-in support for concurrent programming through goroutines and channels, making it easy to create highly concurrent programs.</description>
+    </item>
+    
+    <item>
+      <title>File Upload Vulnerability</title>
+      <link>http://www.debidong.github.io/post/file-upload-vulnerability/</link>
+      <pubDate>Sun, 20 Aug 2023 16:58:00 +0800</pubDate>
+      <author>debidong@foxmail.com (debidong)</author>
+      <guid>http://www.debidong.github.io/post/file-upload-vulnerability/</guid>
+      <description>This article includes the concept of file upload vulnerablity, with its precaution and bypass. There may be more than one updates of this article since there are new methodologies about prevention and exploitation coming up.
+1 Terminology A file upload vulnerability refers to a security flaw present in an application or website that allows attackers to perform malicious actions by uploading malicious files. Such vulnerabilities typically occur in functionalities that require users to upload files, such as image uploads, document uploads, attachments, etc.</description>
+    </item>
+    
+    <item>
+      <title>Working With Databases Correctly in Django</title>
+      <link>http://www.debidong.github.io/post/working-with-databases-correctly-in-django/</link>
+      <pubDate>Wed, 16 Aug 2023 17:00:00 +0800</pubDate>
+      <author>debidong@foxmail.com (debidong)</author>
+      <guid>http://www.debidong.github.io/post/working-with-databases-correctly-in-django/</guid>
+      <description>1 What is ORM The main function of ORM (Object Relational Mapping) is to associate data with tables in the database in programming. ORM converts different types of data into objects in the database, and at the same time provides methods to interact with the objects. The following is an introduction to the ORM of Django.
+Django’s Object-Relational Model or ORM provides a great productivity shortcut: not only generating decent SQL queries for common use cases, but providing model access/update functionality that comes complete with validation and security.</description>
+    </item>
+    
+    <item>
+      <title>Why Cybersecurity</title>
+      <link>http://www.debidong.github.io/post/why-cybersecurity/</link>
+      <pubDate>Fri, 11 Aug 2023 18:30:00 +0800</pubDate>
+      <author>debidong@foxmail.com (debidong)</author>
+      <guid>http://www.debidong.github.io/post/why-cybersecurity/</guid>
+      <description>From a data security perspective, studying Information Security offers essential knowledge in network security beyond programming skills. In this era of data proliferation, safeguarding data privacy and communication confidentiality has become increasingly crucial. As vulnerabilities in existing network protocols and service frameworks are continuously exposed, the importance of protecting data and communication privacy has grown significantly. Profound expertise in Information Security ensures the integrity of user privacy and the uninterrupted operation of businesses.</description>
+    </item>
+    
+    <item>
+      <title>How Are Files and Directories Organized in Linux</title>
+      <link>http://www.debidong.github.io/post/how-are-files-and-directories-organized-in-linux/</link>
+      <pubDate>Thu, 06 Jul 2023 00:00:00 +0800</pubDate>
+      <author>debidong@foxmail.com (debidong)</author>
+      <guid>http://www.debidong.github.io/post/how-are-files-and-directories-organized-in-linux/</guid>
+      <description>In a Linux or Unix operating system, all files and directories are organized into an inverted tree structure starting with a root node. The topmost level of the file system starts with the root directory, and the system uses / to represent the root directory. Under the root directory can be both directories and files, and each directory can contain subdirectory files. So repeated can form a huge file system. All devices in Linux (including hard disks, USB drives, etc.</description>
+    </item>
+    
+    <item>
+      <title>Linux Command Execution Bypass</title>
+      <link>http://www.debidong.github.io/post/linux-command-execution-bypass/</link>
+      <pubDate>Fri, 30 Jun 2023 00:00:00 +0800</pubDate>
+      <author>debidong@foxmail.com (debidong)</author>
+      <guid>http://www.debidong.github.io/post/linux-command-execution-bypass/</guid>
+      <description>1 Comand execution bypass 1.1 Keyword Bypass Bypassing keywords refers to the situation where a blacklist of keywords has been set up to prevent certain actions or commands on a host.
+For instance, if cat command is filtered:
+Substitute with similar functionality commands such as tac, more, less, curl, nl, tail, sort, strings, head, paste, od.
+Employ quotation marks to circumvent the restriction.
+c&amp;#39;at&amp;#39; flag.txt c&amp;#34;at&amp;#34; flag.txt c``at flag.txt c\at flag.</description>
+    </item>
+    
+    <item>
+      <title>Use Git and Use It Well</title>
+      <link>http://www.debidong.github.io/post/use-git-and-use-it-well/</link>
+      <pubDate>Fri, 19 Aug 2022 17:00:00 +0800</pubDate>
+      <author>debidong@foxmail.com (debidong)</author>
+      <guid>http://www.debidong.github.io/post/use-git-and-use-it-well/</guid>
+      <description>0 Terminology Git is a distributed version control system used to track changes in code and coordinate development among multiple individuals in a project.
+Repository: Also known as a repo, it&amp;rsquo;s the place where code and its history of changes are stored. Each project has a Git repository, which can be stored locally or on a remote server. Commit: A commit is a snapshot of code that records changes made to files.</description>
+    </item>
+    
+    <item>
+      <title>Image Format in Computer</title>
+      <link>http://www.debidong.github.io/post/image-format-in-computer/</link>
+      <pubDate>Thu, 11 Aug 2022 10:35:00 +0800</pubDate>
+      <author>debidong@foxmail.com (debidong)</author>
+      <guid>http://www.debidong.github.io/post/image-format-in-computer/</guid>
+      <description>1 Basic concepts 1.1 Color depth Color depth, also known as bit depth, is a unit used to represent the number of colors in a digital image using bits. The unit of color depth is bits. Color depth is represented using exponential powers of 2. As the number of bits increases, the color depth value increases, allowing the image to display a greater range of colors.
+For example, an image with 1 bit color depth represents 2^1 (= 2) colors, which can only be black and white.</description>
+    </item>
+    
+    <item>
+      <title></title>
+      <link>http://www.debidong.github.io/post/writeup-for-orgctf2-crypto/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <author>debidong@foxmail.com (debidong)</author>
+      <guid>http://www.debidong.github.io/post/writeup-for-orgctf2-crypto/</guid>
+      <description>1 题目 小杨同学在上完密码学课程后，决定要自己设计一款又安全、计算开销又小的密码算法。 他叫嚣该算法坚不可摧，并公然把自己的源码和加密示例公之于</description>
+    </item>
+    
+  </channel>
+</rss>
